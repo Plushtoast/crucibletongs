@@ -1,0 +1,28 @@
+{
+    "crucibletongs": {
+        "selectAction": "Wybierz akcję",
+        "SETTINGS": {
+            "enableHotBarActor": "Dodaj aktora do paska skrótów",
+            "enableHotBarActorHint": "Aktualnie wybrany aktor lub postać zostanie wyświetlona na pasku skrótów.",
+            "enableCombatFlow": "Włącz śledzenie walk",
+            "enableCombatFlowHint": "Włącza dodatkowe narzędzie śledzenia walki w Crucible.",
+            "iniTrackerCount": "Liczba postaci w module śledzenia walki",
+            "iniTrackerCountHint": "Liczba postaci wyświetlanych w oknie śledzenia walki",
+            "iniTrackerSize": "Rozmiar narzędzia śledzenia walk",
+            "iniTrackerSizeHint": "Rozmiar przycisków w narzędziu śledzenia walki",
+            "hotbarActorScale": "Skala aktorów na pasku skrótów",
+            "hotbarActorScaleHint": "Skala całego interfejsu użytkownika paska skrótów postaci, obejmującego awatara, zasoby, broń oraz ikony akcji.",
+            "hotbarActionBarMaxWidth": "Maksymalna szerokość paska akcji",
+            "hotbarActionBarMaxWidthHint": "Maksymalna szerokość paska akcji w pikselach, po przekroczeniu której ikony są przenoszone do kolejnego wiersza.",
+            "enableCombatPan": "Przejdź do bieżącej tury",
+            "enableCombatPanHint": "Przesuń widok na bieżącą turę i wybierz token, jeśli dostępne są odpowiednie uprawnienia."
+        },
+        "TABS": {
+            "MACRO": "Makra",
+            "ACTIONS": "Akcje",
+            "TALENTS": "Talenty"
+        },
+        "combatTracker": "Śledzenie walki",
+        "waitInit": "Opóźnienie"
+    }
+}
