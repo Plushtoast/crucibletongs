@@ -1,7 +1,6 @@
 import { HotBarHover } from "./hotbar.js";
 import { HotActions } from "./hotactions.js";
 import "./settings.js";
-import './bugfix.js';
 import { HotBarActor } from "./hotbaractor.js";
 import { CrucibleCombatTracker } from "./initiativetracker.js";
 

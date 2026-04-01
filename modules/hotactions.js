@@ -1,3 +1,5 @@
+import { handleSkillContextAction } from "./utility.js";
+
 export class HotActions extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static maxActionsPerCircle = {
         action: [10, 14, 18, 22, 26],
@@ -179,6 +181,10 @@ export class HotActions extends foundry.applications.api.HandlebarsApplicationMi
     async _onRender(context, options) {
         await super._onRender(context, options);
 
+        for (const skill of this.element.querySelectorAll("[data-type='skill']")) {
+            skill.addEventListener('contextmenu', this.#onSkillContext.bind(this));
+        }
+
         this.element.addEventListener('click', (event) => {
             if (!event.target.closest('.data-action')) {
                 this.close({ animate: false });
@@ -190,6 +196,14 @@ export class HotActions extends foundry.applications.api.HandlebarsApplicationMi
                 action.classList.remove('collapsed');
             });
         }, 20);
+    }
+
+    async #onSkillContext(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const skillId = event.currentTarget.dataset.actionId;
+        this.close({ animate: false });
+        await handleSkillContextAction(this.actor, skillId);
     }
 
 }

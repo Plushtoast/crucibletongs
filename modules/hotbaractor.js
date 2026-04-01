@@ -1,4 +1,4 @@
-import { defenseTooltip } from "./utility.js";
+import { defenseTooltip, handleSkillContextAction } from "./utility.js";
 
 export class HotBarActor extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static AVATAR_RADIUS = 100;
@@ -54,7 +54,9 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
     #setActor() {
         const controlled = canvas?.tokens?.controlled || [];
-        const fallbackActor = game.user.character ?? game.actors?.find((actor) => actor.isOwner && actor.type !== 'group') ?? null;
+        const fallbackActor = game.user.character ?? (!game.user.isGM
+            ? game.actors?.find((actor) => actor.isOwner && actor.type !== 'group') ?? null
+            : null);
         this.actor = controlled.length < 2 ? (controlled[0]?.actor ?? fallbackActor) : null;
 
         if (this.actor?.type === 'group') {
@@ -252,6 +254,10 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             if (this.actor) this.actor.sheet.render(true);
         });
 
+        for (const skill of this.element.querySelectorAll("[data-type='skill']")) {
+            skill.addEventListener('contextmenu', this.#onSkillContext.bind(this));
+        }
+
         new foundry.applications.ux.DragDrop.implementation({
             dragSelector: "[data-type='action']",
             dropSelector: '.slot',
@@ -263,6 +269,12 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         }).bind(this.element);
 
         ui.hotbar.element.hidden = !!this.actor;
+    }
+
+    async #onSkillContext(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        await handleSkillContextAction(this.actor, event.currentTarget.dataset.actionId);
     }
 
     #onDragStart(event) {
