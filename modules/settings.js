@@ -8,6 +8,18 @@ Hooks.once('init', () => {
             default: true,
             type: Boolean,
         },
+        showFavoriteActionsTab: {
+            name: 'crucibletongs.SETTINGS.showFavoriteActions',
+            hint: 'crucibletongs.SETTINGS.showFavoriteActionsTabHint',
+            scope: 'client',
+            config: true,
+            default: true,
+            type: Boolean,
+            onChange: async () => {
+                const instance = foundry.applications.instances.get("actor-hud");
+                if (instance) instance.render(true, { focus: false });
+            },
+        },
         enableCombatFlow: {
             name: 'crucibletongs.SETTINGS.enableCombatFlow',
             hint: 'crucibletongs.SETTINGS.enableCombatFlowHint',

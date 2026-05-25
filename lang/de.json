@@ -4,6 +4,8 @@
         "SETTINGS": {
             "enableHotBarActor": "Aktiviere den Hotbar-Actor",
             "enableHotBarActorHint": "Der aktuell ausgewählte Akteur oder Charakter wird an der Hotbar angezeigt.",
+            "showFavoriteActions": "Favorisierte Aktionen anzeigen",
+            "showFavoriteActionsTabHint": "Zeigt einen Tab für favorisierte Aktionen in der Actor-Hotbar an, wenn der Akteur favorisierte Aktionen hat.",
             "enableCombatFlow": "Kampftracker aktivieren",
             "enableCombatFlowHint": "Aktiviere den zusätzlichen Crucible Kampftracker.",
             "iniTrackerCount": "Kampftracker Anzahl",
@@ -15,12 +17,20 @@
             "hotbarActionBarMaxWidth": "Hotbar Aktionsleiste Maximalbreite",
             "hotbarActionBarMaxWidthHint": "Maximale Breite der Aktionsleiste in Pixeln, bevor Icons in eine neue Zeile umbrechen.",
             "enableCombatPan": "Schwenke zu aktuellem Zug",
-            "enableCombatPanHint": "Schwenke die Sicht auf den aktuellen Zug und selektiere den Token sofern Besitzerrechte vorhanden."
+            "enableCombatPanHint": "Schwenke die Sicht auf den aktuellen Zug und selektiere den Token sofern Besitzerrechte vorhanden.",
+            "CONFIG": {
+                "Title": "Crucible Tongs Konfiguration",
+                "Saved": "Crucible Tongs Einstellungen gespeichert.",
+                "Hint": "Aktionen in der Actor-Hotbar können per Drag and Drop neu sortiert werden.",
+                "ResetDefaults": "Standards wiederherstellen",
+                "DefaultsRestored": "Crucible Tongs Einstellungen wurden auf Standardwerte zurückgesetzt."
+            }
         },
         "TABS": {
             "MACRO": "Makros",
             "ACTIONS": "Aktionen",
-            "TALENTS": "Talente"
+            "TALENTS": "Talente",
+            "FAVORITES": "Favorisierte Aktionen"
         },
         "combatTracker": "Kampftracker",
         "waitInit": "Verzögern"

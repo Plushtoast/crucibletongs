@@ -1,0 +1,14 @@
+<div class="crucibletongs-settings-list scrollable">
+    {{#if hint}}
+    <p class="hint">{{localize hint}}</p>
+    {{/if}}
+    <div class="form-group">
+        <button type="button" data-action="resetDefaults">
+            <i class="fa-solid fa-undo" inert></i>
+            <span>{{localize "crucibletongs.SETTINGS.CONFIG.ResetDefaults"}}</span>
+        </button>
+    </div>
+    {{#each settings as |setting|}}
+    {{formGroup setting.field value=setting.value input=setting.input localize=true}}
+    {{/each}}
+</div>

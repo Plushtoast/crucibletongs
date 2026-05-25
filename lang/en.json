@@ -4,6 +4,8 @@
         "SETTINGS": {
             "enableHotBarActor": "Enable Actor on Hotbar",
             "enableHotBarActorHint": "The current selected actor or character will be shown on the hotbar.",
+            "showFavoriteActions": "Show Favorite Actions",
+            "showFavoriteActionsTabHint": "Show a favorite actions tab on the actor hotbar when the actor has favorite actions.",
             "enableCombatFlow": "Enable Combat Tracker",
             "enableCombatFlowHint": "Enables the additional Crucible Combat Tracker.",
             "iniTrackerCount": "Combat Tracker Count",
@@ -15,12 +17,20 @@
             "hotbarActionBarMaxWidth": "Hotbar Action Bar Max Width",
             "hotbarActionBarMaxWidthHint": "Maximum width of the action bar in pixels before icons wrap to a new line.",
             "enableCombatPan": "Pan to Current Turn",
-            "enableCombatPanHint": "Pan the view to the current turn and select the token if ownership rights are available."
+            "enableCombatPanHint": "Pan the view to the current turn and select the token if ownership rights are available.",
+            "CONFIG": {
+                "Title": "Crucible Tongs Configuration",
+                "Saved": "Crucible Tongs settings saved.",
+                "Hint": "Actions on the actor hotbar can be reordered with drag and drop.",
+                "ResetDefaults": "Reset Defaults",
+                "DefaultsRestored": "Crucible Tongs settings reset to defaults."
+            }
         },
         "TABS": {
             "MACRO": "Macros",
             "ACTIONS": "Actions",
-            "TALENTS": "Talents"
+            "TALENTS": "Talents",
+            "FAVORITES": "Favorite Actions"
         },
         "combatTracker": "Combat Tracker",
         "waitInit": "Delay"

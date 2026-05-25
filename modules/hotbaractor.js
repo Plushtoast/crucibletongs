@@ -1,3 +1,4 @@
+import { CrucibleTongsSettingsConfig } from "./settings-app.js";
 import { defenseTooltip, handleSkillContextAction } from "./utility.js";
 
 export class HotBarActor extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
@@ -10,6 +11,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         id: "actor-hud",
         actions: {
             action: this._onAction,
+            configure: this._onConfigure,
         },
         window: {
             frame: false,
@@ -27,6 +29,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     static TABS = {
         sheet: {
             tabs: [
+                { id: 'favorites', label: 'crucibletongs.TABS.FAVORITES' },
                 { id: 'actions', label: 'crucibletongs.TABS.ACTIONS' },
                 { id: 'talents', label: 'crucibletongs.TABS.TALENTS' },
                 { id: 'macro', label: 'crucibletongs.TABS.MACRO' },
@@ -50,6 +53,10 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
                 this.actor.rollSkill(actionId, { dialog: true });
                 break;
         }
+    }
+
+    static _onConfigure() {
+        new CrucibleTongsSettingsConfig().render(true, { focus: true });
     }
 
     #setActor() {
@@ -82,6 +89,13 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
         context.actor = this.actor;
         context.actions = this.#prepareActions();
+        context.favoriteActions = this.#prepareFavoriteActions(context.actions);
+        context.hasFavoriteActions = game.settings.get("crucibletongs", "showFavoriteActionsTab") && Object.keys(context.favoriteActions).length > 0;
+        if (!context.hasFavoriteActions && this.tabGroups?.sheet === "favorites") {
+            this.tabGroups.sheet = "actions";
+            context.tabs.favorites.cssClass = context.tabs.favorites.cssClass.replace("active", "").trim();
+            context.tabs.actions.cssClass = [context.tabs.actions.cssClass, "active"].filterJoin(" ");
+        }
         context.resources = this.#prepareResources();
         context.defenseTooltip = this.#prepareDefenseTooltip();
         context.weapons = this.#weaponPositions();
@@ -115,6 +129,15 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             }
         }
         return sorted;
+    }
+
+    #prepareFavoriteActions(actions) {
+        const favorites = {};
+        for (const [id, action] of Object.entries(actions)) {
+            if (!((action.isFavorite || action.autoFavorite) && action._displayOnSheet())) continue;
+            favorites[id] = action;
+        }
+        return Object.fromEntries(Object.entries(favorites).sort(([, a], [, b]) => a.name.localeCompare(b.name)));
     }
 
     #prepareEffects() {

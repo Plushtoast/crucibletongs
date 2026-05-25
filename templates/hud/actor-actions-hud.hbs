@@ -4,6 +4,11 @@
     </div>
     <nav class="sheet-tabs tabs" aria-role="Form Tab Navigation">
 
+        {{#if hasFavoriteActions}}
+        <a class="{{tabs.favorites.cssClass}}" data-action="tab" data-group="sheet" data-tab="favorites" data-tooltip="crucibletongs.TABS.FAVORITES">
+            <i class="tab-icon fa-solid fa-star"></i>
+        </a>
+        {{/if}}
         <a class="{{tabs.actions.cssClass}}" data-action="tab" data-group="sheet" data-tab="actions" data-tooltip="crucibletongs.TABS.ACTIONS">
             <img class="tab-icon" src="systems/crucible/ui/tabs/actions.webp">
         </a>
@@ -14,8 +19,22 @@
             data-tooltip="crucibletongs.TABS.MACRO">
             <img class="tab-icon" src="systems/crucible/ui/tabs/biography.webp">
         </a>
+        <a data-action="configure" data-tooltip="crucibletongs.SETTINGS.CONFIG.Title">
+            <i class="tab-icon fa-solid fa-gear"></i>
+        </a>
     </nav>
 
+    {{#if hasFavoriteActions}}
+    <section class="tab flexcol {{tabs.favorites.cssClass}}" data-group="{{tabs.favorites.group}}" data-tab="{{tabs.favorites.id}}">
+        <div class="actions-bar" data-tooltip-direction="UP">
+            {{#each favoriteActions as |action key|}}
+            <div class="slot" type="button" data-type="action" data-action="action" data-key="{{key}}" data-uuid="{{../actor.uuid}}" data-crucible-tooltip="action" data-tooltip-class="crucible crucible-tooltip" data-tooltip="{{action.name}}" data-action-id="{{key}}">
+                <img src="{{action.img}}" />
+            </div>
+            {{/each}}
+        </div>
+    </section>
+    {{/if}}
     <section class="tab flexcol {{tabs.actions.cssClass}}" data-group="{{tabs.actions.group}}" data-tab="{{tabs.actions.id}}">
         <div class="actions-bar action-items" data-tooltip-direction="UP">
             {{#each actions as |action key|}}

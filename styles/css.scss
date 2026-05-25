@@ -1,0 +1,694 @@
+.crucibletongs-action-hud {
+    --radius: 100px;
+    width: calc(var(--radius) * 2);
+    height: calc(var(--radius) * 2);
+    position: absolute;
+}
+
+.crucibletongs-action-hud-content {
+    position: relative;
+}
+
+.crucibletongs-action-button {
+    background: none;
+    width: 50px;
+    height: 50px;
+    --x: 0;
+    --y: 0;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    background-size: cover;
+    left: calc(var(--x) - 15px);
+    top: calc(var(--y) - 15px);
+    border-radius: 50%;
+    border: 2px solid #333;
+    transition: all 0.05s ease-in-out;
+
+    &.collapsed {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+
+    &:hover {
+        border-color: darkred;
+        box-shadow: 0 0 10px darkred;
+    }
+
+    &.crucibletongs-action-close {
+        left: 50%;
+        top: var(--radius);
+        transform: translate(-50%, -50%);
+        background-color: #333;
+        color: wheat;
+    }
+}
+
+.crucibletongs-actor-hud {
+    --color-frame: #3f3128;
+    --color-frame-light: #5a453b;
+    --ressource-color: #FF9900;
+    --text-color: #cfbea2;
+    --text-color-bright: #f4e6d7;
+    --background-actor: rgba(28, 26, 26, 0.8);
+    --background-actor-hover: rgba(28, 26, 26, 0.95);
+    --hover-color: #c41e3a;
+    --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    --hotbarActorScale: 1;
+    --hotbarActionBarMaxWidth: 300px;
+    --hotbarActionBarSlotSize: 40px;
+    --hotbarActionBarGap: 4px;
+
+    pointer-events: all;
+    margin-bottom: 10px;
+    transition: all 0.3s ease-in-out;
+    transform-origin: left bottom;
+    transform: scale(var(--hotbarActorScale));
+
+    .crucibletongs-hotbar-inner {
+        position: relative;
+
+        > .flexrow {
+            gap: 8px;
+        }
+    }
+
+    .avatar {
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        border: 3px solid var(--color-frame);
+        box-shadow:
+            0 0 20px rgba(0, 0, 0, 0.5),
+            inset 0 2px 4px rgba(255, 255, 255, 0.1);
+
+        &:hover {
+            transform: scale(1.05);
+            border-color: var(--color-frame-light);
+            box-shadow:
+                0 0 25px rgba(255, 153, 0, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+
+        &.myRound {
+            border-color: var(--hover-color);
+            box-shadow:
+                0 0 25px rgba(83, 78, 79, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1);
+            animation: avatar-pulse-red 2s ease-in-out infinite alternate;
+        }
+    }
+
+    @keyframes avatar-pulse-red {
+        0% {
+            box-shadow:
+                0 0 20px 6px rgba(196, 30, 58, 0.5),
+                0 0 8px 2px rgba(196, 30, 58, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+        100% {
+            box-shadow:
+                0 0 40px 12px rgba(196, 30, 58, 0.9),
+                0 0 12px 4px rgba(196, 30, 58, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    .actions-bar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: start;
+        align-content: flex-start;
+        gap: var(--hotbarActionBarGap);
+        width: fit-content;
+        max-width: var(--hotbarActionBarMaxWidth);
+        max-height: calc(var(--hotbarActionBarSlotSize) * 3 + var(--hotbarActionBarGap) * 2);
+        overflow-y: auto;
+        overflow-x: hidden;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .tabs {
+        justify-content: start;
+        gap: 1px;
+    }
+
+    .tabs a {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+        border: 2px solid var(--color-frame);
+        cursor: var(--cursor-pointer);
+        transition: all 0.2s ease-in-out;
+        border-radius: 4px;
+        box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+        &.active {
+            border-color: #4a90e2;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.4) 0%, rgba(74, 144, 226, 0.2) 100%);
+            box-shadow:
+                0 0 8px rgba(74, 144, 226, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        &:hover {
+            border-color: var(--hover-color);
+            background: linear-gradient(135deg, rgba(196, 30, 58, 0.3) 0%, rgba(196, 30, 58, 0.1) 100%);
+            box-shadow:
+                0 0 8px rgba(196, 30, 58, 0.4),
+                0 2px 6px rgba(0, 0, 0, 0.4);
+            transform: translateY(-1px);
+        }
+    }
+
+    .tab-icon.fa-solid {
+        color: var(--text-color-bright);
+        font-size: 16px;
+        line-height: 1;
+        text-shadow: var(--text-shadow);
+    }
+
+    .slot {
+        flex: 0 0 var(--hotbarActionBarSlotSize);
+        width: var(--hotbarActionBarSlotSize);
+        height: var(--hotbarActionBarSlotSize);
+        box-sizing: border-box;
+        background: linear-gradient(135deg, rgba(28, 26, 26, 0.8) 0%, rgba(28, 26, 26, 0.6) 100%);
+        border: 2px solid var(--color-frame);
+        cursor: var(--cursor-pointer);
+        position: relative;
+        transition: all 0.2s ease-in-out;
+        border-radius: 4px;
+        box-shadow:
+            0 2px 6px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+        &.drop-target {
+            border-color: var(--hover-color);
+            box-shadow: inset 0 0 15px rgba(196, 30, 58, 0.5);
+            transform: scale(0.95);
+        }
+
+        .key {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            line-height: 20px;
+            padding-right: 2px;
+            background: var(--key-bg-color-empty, var(--color-cool-5));
+            border-radius: 10px 0 8px 0;
+            color: var(--key-text-color, var(--color-light-1));
+            text-align: center;
+            pointer-events: none;
+        }
+
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        &:hover {
+            border-color: var(--hover-color);
+            box-shadow:
+                0 0 12px rgba(196, 30, 58, 0.4),
+                0 4px 8px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+
+            img {
+                transform: scale(1.05);
+            }
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    .pips {
+        flex: 0 0 100px;
+        justify-content: center;
+        gap: 4px 0;
+
+        &.focus {
+            --ressource-color: #0066FF;
+        }
+
+        &.heroism {
+            --ressource-color: #ff0059;
+        }
+    }
+
+    .pips .pip {
+        flex: 0 0 10px;
+        height: 10px;
+        border: 1px solid var(--color-frame);
+        background: black;
+        border-radius: 7px;
+
+        &.double {
+            border-color: var(--resource-color);
+        }
+
+        &.full:before {
+            display: block;
+            content: "";
+            width: 6px;
+            height: 6px;
+            margin: 1px;
+            background: var(--ressource-color);
+            border-radius: 50%;
+        }
+    }
+
+    .avatar-container {
+        position: relative;
+        min-width: 180px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .avatar {
+        position: relative;
+        z-index: 1;
+        width: 100px;
+        flex: 0 0 100px;
+        min-width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 2px solid var(--color-frame);
+        object-fit: contain;
+        background: rgba(28, 26, 26, 0.5);
+
+        &.myRound {
+            border-color: darkred;
+        }
+    }
+
+    .temporaryEffects {
+        gap: 2px;
+        margin-bottom: 8px;
+    }
+
+    .actor-actions-hud {
+        align-self: end;
+    }
+
+    button {
+        border: 2px solid var(--color-frame);
+        border-radius: 6px;
+        background: linear-gradient(135deg, var(--background-actor) 0%, rgba(28, 26, 26, 0.7) 100%);
+        color: var(--text-color-bright);
+        padding: 4px 8px;
+        font-weight: 500;
+        text-shadow: var(--text-shadow);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+        &:hover {
+            border-color: var(--hover-color);
+            background: linear-gradient(135deg, var(--background-actor-hover) 0%, rgba(196, 30, 58, 0.2) 100%);
+            box-shadow:
+                0 0 12px rgba(196, 30, 58, 0.4),
+                0 2px 8px rgba(0, 0, 0, 0.4);
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+
+    .resources {
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        top: -2px;
+        width: 180px;
+        gap: 6px;
+        z-index: 1;
+
+        .resource-pair {
+            flex: 0 0 calc((180px - 6px) / 2);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: calc((180px - 6px) / 2);
+            box-sizing: border-box;
+            overflow: hidden;
+            border: 1px solid var(--color-frame);
+            border-radius: 6px;
+            background: rgba(20, 18, 18, 0.88);
+            background: linear-gradient(135deg, rgba(20, 18, 18, 0.92) 0%, rgba(48, 38, 32, 0.86) 100%);
+            color: var(--text-color-bright);
+            font-weight: 600;
+            text-shadow: var(--text-shadow);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 2px 0 0 var(--resource-accent), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease-in-out;
+            text-align: center;
+
+            &:hover {
+                transform: translateY(-1px);
+                border-color: var(--color-frame-light);
+                box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4), inset 2px 0 0 var(--resource-accent), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+
+            &.single-resource .resource-current {
+                min-height: 37px;
+                font-size: 14px;
+            }
+        }
+
+        @supports (backdrop-filter: blur(1px)) {
+            .resource-pair {
+                backdrop-filter: blur(6px);
+            }
+        }
+
+        .resource-current,
+        .resource-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 18px;
+            padding: 1px 6px;
+            white-space: nowrap;
+        }
+
+        .resource-current {
+            color: var(--text-color-bright);
+            font-size: 12px;
+        }
+
+        .resource-secondary {
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.24);
+            color: var(--text-color);
+            font-size: 10px;
+        }
+    }
+
+    .tongs-indicator,
+    .tongs-indicator i:before {
+        text-align: center;
+        text-shadow:
+            -1px -1px 0 var(--color-frame),
+            1px -1px 0 var(--color-frame),
+            -1px 1px 0 var(--color-frame),
+            1px 1px 0 var(--color-frame);
+    }
+
+    .quickbuttons {
+        align-items: center;
+        justify-content: center;
+        margin-top: -10px;
+        position: relative;
+        z-index: 1;
+    }
+
+
+    .weapon {
+        width: 44px;
+        height: 44px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 50%;
+        border: 2px solid var(--color-frame);
+        background: linear-gradient(135deg, var(--background-actor) 0%, rgba(28, 26, 26, 0.6) 100%);
+        cursor: var(--cursor-pointer);
+        color: var(--text-color-bright);
+        position: absolute;
+        z-index: 2;
+        transition: all 0.2s ease-in-out;
+        box-shadow:
+            0 3px 8px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        font-size: 18px;
+        backdrop-filter: blur(4px);
+
+        &:hover {
+            border-color: var(--hover-color);
+            background: linear-gradient(135deg, var(--background-actor-hover) 0%, rgba(196, 30, 58, 0.2) 100%);
+            box-shadow:
+                0 0 15px rgba(196, 30, 58, 0.4),
+                0 3px 12px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px) scale(1.05);
+            z-index: 3;
+        }
+
+        &:active {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        img {
+            border-radius: 50%;
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+
+        i {
+            font-size: 20px;
+        }
+    }
+}
+
+.crucibletongs-settings-config {
+    .crucibletongs-settings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-group {
+        align-items: start;
+    }
+}
+
+.crucible-tongs-combat-tracker {
+    position: absolute;
+
+    .dragHandler {
+        height: var(--tokenQuickhotsize);
+        text-align: center;
+        float: right;
+        min-width: 15px;
+        background: none;
+        border: none;
+        line-height: var(--iniTrackerSize);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            color: white;
+        }
+    }
+
+    .next-round-box {
+        background: linear-gradient(135deg, #496fd7 0%, #2d4a9e 100%) !important;
+        border: 2px solid #6b8cde !important;
+        box-shadow: 0 0 10px rgba(73, 111, 215, 0.5) !important;
+
+        .next-round-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            gap: 4px;
+
+            i {
+                font-size: calc(var(--iniTrackerSize) * 0.35);
+            }
+
+            .next-round-number {
+                font-size: calc(var(--iniTrackerSize) * 0.3);
+                font-weight: bold;
+            }
+        }
+    }
+
+    .waitTitle {
+        background-image: none;
+
+        i {
+            float: left;
+            width: 100%;
+            line-height: calc(var(--iniTrackerSize) * 0.5);
+            text-align: center;
+            color: white;
+        }
+    }
+
+    .hoverbuttons {
+        color: white;
+        position: absolute;
+        right: 0;
+        top: 25%;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .combatant {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+    }
+
+    .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+
+        i {
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+        }
+
+        &.right {
+            text-align: right;
+        }
+    }
+
+    button {
+        line-height: 21px;
+    }
+
+    .frame-brown {
+        &:hover {
+            box-shadow: inset 0 0 3px #5c0016;
+            border-color: white;
+            background-image: linear-gradient(to right top, #8a1818, #7a1018, #6a0a16, #5c0416, #5c0016);
+        }
+
+        &.lastRound {
+            background-image: linear-gradient(to right top, #02234d, #022a5b, #023168, #02366e, #023b74);
+
+            &:hover {
+                box-shadow: inset 0 0 3px #023b74;
+                background-image: linear-gradient(to right top, #0a3369, #0a3b7c, #0a4390, #0a4ca3, #0a54b7);
+            }
+        }
+    }
+
+    li {
+        width: var(--iniTrackerSize);
+        height: var(--iniTrackerSize);
+        box-shadow: none;
+        border: 1px solid transparent;
+        list-style: none;
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+
+        .roll:before {
+            position: absolute;
+            content: '6';
+            color: white;
+            left: 0;
+            right: 0;
+            top: 0px;
+            bottom: 0;
+            text-align: center;
+        }
+
+        &:hover .hoverbuttons {
+            opacity: 1;
+        }
+
+        .roll {
+            position: relative;
+            display: block;
+            width: 25px;
+            height: 25px;
+            background: url('../../icons/dice/d6white.svg') no-repeat 50% 50%;
+            margin: 0 auto;
+        }
+
+        &.active {
+            border-color: white;
+            box-shadow: inset 0px 0px 10px white;
+        }
+
+        &.defeated,
+        &.hidden {
+            opacity: 0.5;
+        }
+
+        &.defeated {
+            background-size: 75% 75%;
+            background-position: center;
+        }
+    }
+
+    .item-structure {
+        border: 0.5px solid rgb(14, 12, 12);
+        height: 100%;
+        width: 4px;
+        position: relative;
+        transform: translateY(-102%);
+
+        &.second {
+            left: 4px;
+            top: -100%;
+
+            .inner {
+                background-color: #7550ff;
+            }
+        }
+
+        .inner {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: min(100%, calc(100% * var(--b) / var(--a)));
+            background-color: #d72828;
+        }
+    }
+
+    .iniTrackerList {
+        margin: 0;
+        padding: 0;
+        display: flex;
+
+        li:last-child {
+            margin-bottom: 0.25rem;
+        }
+    }
+
+    .combatant-advanced {
+        position: relative;
+        height: var(--iniTrackerSize);
+
+        i {
+            position: absolute;
+            left: 4px;
+            bottom: 4px;
+            right: unset;
+            color: #000;
+            width: 14px;
+
+            &.reversed {
+                transform: scaleX(-1);
+            }
+        }
+    }
+}

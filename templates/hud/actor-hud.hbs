@@ -1,12 +1,18 @@
 <div class="flex0">
     <div class="flexrow resources">
-        <div class="flex0" data-tooltip-html="{{resources.health.label}} {{resources.health.value}}/{{resources.health.max}}<br>{{resources.wounds.label}} {{resources.wounds.value}}/{{resources.wounds.max}}"
-            style="background:{{resources.health.color.high}};">
-            {{resources.health.value}}/{{resources.health.max}}
+        <div class="flex0 resource-pair {{#unless resources.wounds.value}}single-resource{{/unless}}" data-tooltip-html="{{resources.health.label}} {{resources.health.value}}/{{resources.health.max}}{{#if resources.wounds.value}}<br>{{resources.wounds.label}} {{resources.wounds.value}}/{{resources.wounds.max}}{{/if}}"
+            style="--resource-accent: {{resources.health.color.high}};">
+            <div class="resource-current">{{resources.health.value}}/{{resources.health.max}}</div>
+            {{#if resources.wounds.value}}
+            <div class="resource-secondary">{{resources.wounds.value}}/{{resources.wounds.max}}</div>
+            {{/if}}
         </div>
-        <div class="flex0" data-tooltip-html="{{resources.morale.label}} {{resources.morale.value}}/{{resources.morale.max}}<br>{{resources.madness.label}} {{resources.madness.value}}/{{resources.madness.max}}"
-            style="background:{{resources.morale.color.high}};">
-            {{resources.morale.value}}/{{resources.morale.max}}
+        <div class="flex0 resource-pair {{#unless resources.madness.value}}single-resource{{/unless}}" data-tooltip-html="{{resources.morale.label}} {{resources.morale.value}}/{{resources.morale.max}}{{#if resources.madness.value}}<br>{{resources.madness.label}} {{resources.madness.value}}/{{resources.madness.max}}{{/if}}"
+            style="--resource-accent: {{resources.morale.color.high}};">
+            <div class="resource-current">{{resources.morale.value}}/{{resources.morale.max}}</div>
+            {{#if resources.madness.value}}
+            <div class="resource-secondary">{{resources.madness.value}}/{{resources.madness.max}}</div>
+            {{/if}}
         </div>
     </div>
     <div class="avatar-container flexrow">

@@ -1,0 +1,10 @@
+{
+  "name": "crucibletongs",
+  "private": true,
+  "scripts": {
+    "sass": "sass --no-source-map styles/css.scss styles/css.css"
+  },
+  "devDependencies": {
+    "sass": "^1.94.2"
+  }
+}
