@@ -154,8 +154,12 @@ export class CrucibleCombatTracker extends foundry.applications.api.HandlebarsAp
         options.position.width = Math.max(calculatedWidth, minWidth);
 
         let extraHeight = 0;
-        if (combatStarted && (data.control || game.user.isGM)) extraHeight += 28;
-        if (data.showActiveCombatantActions) extraHeight += 22;
+        const showTurnControls = combatStarted && (data.control || game.user.isGM);
+        if (showTurnControls && !data.showActiveCombatantActions) extraHeight += 28;
+        if (data.showActiveCombatantActions) {
+            extraHeight += 22;
+            if (showTurnControls) extraHeight += 38;
+        }
         options.position.height = itemWidth + 10 + extraHeight;
 
         Object.assign(data, {

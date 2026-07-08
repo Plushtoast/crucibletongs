@@ -80,10 +80,12 @@
     {{/if}}
     {{else}}
     {{#if (or control user.isGM)}}
+    {{#unless showActiveCombatantActions}}
     <div class="flexrow">
         <button type="button" class="combat-control frame-brown {{ifThen isLastTurn 'lastRound' ''}}" data-action="nextTurn">{{localize (ifThen isLastTurn 'COMBAT.RoundNext' 'COMBAT.TurnEnd')}}</button>
         <button type="button" class="combat-control frame-brown" data-action="waitInit">{{localize 'crucibletongs.waitInit'}}</button>
-    </div>    
+    </div>
+    {{/unless}}
     {{/if}}
     {{#if showActiveCombatantActions}}
     <div class="active-combatant-resources flexrow">
@@ -112,6 +114,16 @@
             </div>
         </div>
     </div>
+    {{#if (or control user.isGM)}}
+    <div class="ini-turn-controls flexrow">
+        <button type="button" class="ini-turn-control frame-brown inline-control combat-control icon fa-solid {{ifThen isLastTurn 'fa-step-forward' 'fa-check'}} {{ifThen isLastTurn 'lastRound' ''}}"
+            data-action="nextTurn" data-tooltip="{{ifThen isLastTurn 'COMBAT.RoundNext' 'COMBAT.TurnEnd'}}"
+            aria-label="{{ localize (ifThen isLastTurn 'COMBAT.RoundNext' 'COMBAT.TurnEnd') }}"></button>
+        <button type="button" class="ini-turn-control frame-brown inline-control combat-control icon fa-solid fa-clock"
+            data-action="waitInit" data-tooltip="crucibletongs.waitInit"
+            aria-label="{{ localize 'crucibletongs.waitInit' }}"></button>
+    </div>
+    {{/if}}
     {{/if}}
     {{/unless}}
 </div>

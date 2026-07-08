@@ -15,6 +15,8 @@ import {
 export class HotBarActor extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static AVATAR_RADIUS = 100;
     static WEAPON_RADIUS = 40;
+    static ACTION_BAR_SLOT_SIZE = 40;
+    static ACTION_BAR_GAP = 4;
 
     #dropTarget;
 
@@ -113,6 +115,46 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         context.weapons = this.#weaponPositions();
         context.effects = this.#prepareEffects();
         context.slots = ui.hotbar.slots;
+        context.actionSlots = this.#prepareActionBarSlots(Object.entries(context.actions).map(([key, action]) => ({
+            type: "action",
+            key,
+            id: key,
+            img: action.img,
+            name: action.name,
+        })));
+        context.favoriteSlots = this.#prepareActionBarSlots(Object.entries(context.favoriteActions).map(([key, action]) => ({
+            type: action.type,
+            key,
+            id: action.id,
+            img: action.img,
+            name: action.name,
+            isAction: action.isAction,
+            tooltip: action.tooltip,
+        })));
+        context.talentSlots = this.#prepareActionBarSlots(context.talents.map((talent, key) => ({
+            type: "skill",
+            key,
+            id: talent.id,
+            img: talent.img,
+            tooltip: talent.tooltip,
+        })));
+    }
+
+    #getActionBarLayout() {
+        const width = game.settings.get("crucibletongs", "hotbarActionBarMaxWidth") ?? 300;
+        const rows = game.settings.get("crucibletongs", "hotbarActionBarRows") ?? 3;
+        const { ACTION_BAR_SLOT_SIZE: slotSize, ACTION_BAR_GAP: gap } = HotBarActor;
+        const columns = Math.max(1, Math.floor((width + gap) / (slotSize + gap)));
+        return { columns, rows, total: columns * rows };
+    }
+
+    #prepareActionBarSlots(items) {
+        const { total } = this.#getActionBarLayout();
+        const slots = items.map(item => ({ cssClass: "full", empty: false, ...item }));
+        while (slots.length < total) {
+            slots.push({ cssClass: "open", empty: true });
+        }
+        return slots;
     }
 
     #prepareDefenseTooltip() {
@@ -283,8 +325,10 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
         const scale = game.settings.get("crucibletongs", "hotbarActorScale") ?? 1;
         const maxWidth = game.settings.get("crucibletongs", "hotbarActionBarMaxWidth") ?? 300;
+        const rows = game.settings.get("crucibletongs", "hotbarActionBarRows") ?? 3;
         this.element.style.setProperty("--hotbarActorScale", scale);
-        this.element.style.setProperty("--hotbarActionBarMaxWidth", `${maxWidth}px`);
+        this.element.style.setProperty("--hotbarActionBarWidth", `${maxWidth}px`);
+        this.element.style.setProperty("--hotbarActionBarRows", rows);
 
         this.element.querySelector('.avatar')?.addEventListener('dblclick', () => {
             if (this.actor) this.actor.sheet.render(true);
@@ -333,7 +377,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         const target = event.target.closest(".slot")?.dataset.actionId;
         if (!target) return;
 
-        const slots = this.element.querySelectorAll(".action-items .slot");
+        const slots = this.element.querySelectorAll(".action-items .slot.full");
 
         const slotArray = Array.from(slots).map(s => s.dataset.actionId);
         const fromIndex = slotArray.indexOf(dragData.id);

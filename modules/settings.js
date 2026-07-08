@@ -117,6 +117,23 @@ Hooks.once('init', () => {
                 if (instance) instance.render(true, { focus: false });
             },
         },
+        hotbarActionBarRows: {
+            name: 'crucibletongs.SETTINGS.hotbarActionBarRows',
+            hint: 'crucibletongs.SETTINGS.hotbarActionBarRowsHint',
+            scope: 'client',
+            config: true,
+            default: 3,
+            type: Number,
+            range: {
+                min: 1,
+                max: 6,
+                step: 1,
+            },
+            onChange: async () => {
+                const instance = foundry.applications.instances.get("actor-hud");
+                if (instance) instance.render(true, { focus: false });
+            },
+        },
     };
     for (const [key, value] of Object.entries(settings)) {
         game.settings.register('crucibletongs', key, value);

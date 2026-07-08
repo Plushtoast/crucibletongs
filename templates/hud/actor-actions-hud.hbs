@@ -27,30 +27,42 @@
     {{#if hasFavoriteActions}}
     <section class="tab flexcol {{tabs.favorites.cssClass}}" data-group="{{tabs.favorites.group}}" data-tab="{{tabs.favorites.id}}">
         <div class="actions-bar" data-tooltip-direction="UP">
-            {{#each favoriteActions as |action key|}}
-            <div class="slot" type="button" data-type="{{action.type}}" data-action="action" data-key="{{key}}" data-uuid="{{../actor.uuid}}" data-tooltip-class="crucible crucible-tooltip" data-action-id="{{action.id}}" {{#if action.isAction}}data-crucible-tooltip="action" data-tooltip="{{action.name}}"{{else}}data-tooltip-html="{{action.tooltip}}"{{/if}}>
-                <img src="{{action.img}}" />
+            {{#each favoriteSlots as |slot|}}
+            {{#if slot.empty}}
+            <div class="slot {{slot.cssClass}}"></div>
+            {{else}}
+            <div class="slot {{slot.cssClass}}" type="button" data-type="{{slot.type}}" data-action="action" data-key="{{slot.key}}" data-uuid="{{../actor.uuid}}" data-tooltip-class="crucible crucible-tooltip" data-action-id="{{slot.id}}" {{#if slot.isAction}}data-crucible-tooltip="action" data-tooltip="{{slot.name}}"{{else}}data-tooltip-html="{{slot.tooltip}}"{{/if}}>
+                <img src="{{slot.img}}" />
             </div>
+            {{/if}}
             {{/each}}
         </div>
     </section>
     {{/if}}
     <section class="tab flexcol {{tabs.actions.cssClass}}" data-group="{{tabs.actions.group}}" data-tab="{{tabs.actions.id}}">
         <div class="actions-bar action-items" data-tooltip-direction="UP">
-            {{#each actions as |action key|}}
-            <div class="slot" type="button" data-type="action" data-action="action" data-key="{{key}}" data-uuid="{{../actor.uuid}}" data-crucible-tooltip="action" data-tooltip-class="crucible crucible-tooltip" data-tooltip="{{action.name}}" data-action-id="{{key}}">
-                <img src="{{action.img}}" />
+            {{#each actionSlots as |slot|}}
+            {{#if slot.empty}}
+            <div class="slot {{slot.cssClass}}"></div>
+            {{else}}
+            <div class="slot {{slot.cssClass}}" type="button" data-type="action" data-action="action" data-key="{{slot.key}}" data-uuid="{{../actor.uuid}}" data-crucible-tooltip="action" data-tooltip-class="crucible crucible-tooltip" data-tooltip="{{slot.name}}" data-action-id="{{slot.id}}">
+                <img src="{{slot.img}}" />
             </div>
+            {{/if}}
             {{/each}}
         </div>
     </section>
     <section class="tab flexcol {{tabs.talents.cssClass}}" data-group="{{tabs.talents.group}}"
         data-tab="{{tabs.talents.id}}">
         <div class="actions-bar" data-tooltip-direction="UP">
-            {{#each talents as |action key|}}
-            <div class="slot" type="button" data-type="skill" data-action-id="{{action.id}}" data-action="action" data-key="{{key}}" data-tooltip-html="{{action.tooltip}}" data-tooltip-class="crucible crucible-tooltip">
-                <img src="{{action.img}}" />
+            {{#each talentSlots as |slot|}}
+            {{#if slot.empty}}
+            <div class="slot {{slot.cssClass}}"></div>
+            {{else}}
+            <div class="slot {{slot.cssClass}}" type="button" data-type="skill" data-action-id="{{slot.id}}" data-action="action" data-key="{{slot.key}}" data-tooltip-html="{{slot.tooltip}}" data-tooltip-class="crucible crucible-tooltip">
+                <img src="{{slot.img}}" />
             </div>
+            {{/if}}
             {{/each}}
         </div>
     </section>
