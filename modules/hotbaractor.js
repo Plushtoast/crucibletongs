@@ -506,9 +506,9 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
                 if (item.system.properties.has("natural")) continue;
 
                 options.push({
-                    name: _loc(`crucibletongs.HOTBAR.WEAPON.${item.system.dropped ? "Recover" : "Equip"}`, { item: item.name }),
+                    label: _loc(`crucibletongs.HOTBAR.WEAPON.${item.system.dropped ? "Recover" : "Equip"}`, { item: item.name }),
                     icon: `<i class='fa-solid ${item.system.dropped ? 'fa-hand-back-fist' : 'fa-shield-plus'}'></i>`,
-                    callback: () => this.actor.equipItem(item.id, { equipped: true }),
+                    onClick: () => this.actor.equipItem(item.id, { equipped: true }),
                 });
             }
             return options;
@@ -516,16 +516,16 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
         return [
             {
-                name: _loc("crucibletongs.HOTBAR.WEAPON.Drop", { item: weapon.name }),
+                label: _loc("crucibletongs.HOTBAR.WEAPON.Drop", { item: weapon.name }),
                 icon: "<i class='fa-solid fa-hand-point-down'></i>",
-                condition: !weapon.system.dropped,
-                callback: () => this.actor.equipItem(weapon.id, { equipped: false, dropped: true }),
+                visible: !weapon.system.dropped,
+                onClick: () => this.actor.equipItem(weapon.id, { equipped: false, dropped: true }),
             },
             {
-                name: _loc("crucibletongs.HOTBAR.WEAPON.UnEquip", { item: weapon.name }),
+                label: _loc("crucibletongs.HOTBAR.WEAPON.UnEquip", { item: weapon.name }),
                 icon: "<i class='fa-solid fa-shield-minus'></i>",
-                condition: !weapon.system.dropped,
-                callback: () => this.actor.equipItem(weapon.id, { equipped: false, dropped: false }),
+                visible: !weapon.system.dropped,
+                onClick: () => this.actor.equipItem(weapon.id, { equipped: false, dropped: false }),
             },
         ];
     }

@@ -1,9 +1,9 @@
 {
   "title": "Crucible Tongs",
   "description": "Crucible Tongs adds some minor functionality to the crucible system to enhance the experience for the current Ember Playtest. Among these is a Action HUD on the Token to quickly select combat actions as well as some additional tooltips for the Macro bar or even an entire hotbar replacement with details for the current selected actor. Be aware as Crucible is still under heavy development the functions might get outdated or replace quickly.",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "manifest": "https://raw.githubusercontent.com/Plushtoast/crucibletongs/foundry14/module.json",
-  "download": "https://github.com/Plushtoast/crucibletongs/releases/download/1.4.1/crucibletongs-1.4.1.zip",
+  "download": "https://github.com/Plushtoast/crucibletongs/releases/download/1.5.0/crucibletongs-1.5.0.zip",
   "languages": [
     {
       "lang": "de",
@@ -42,7 +42,7 @@
         "id": "crucible",
         "type": "system",
         "compatibility": {
-          "minimum": "0.9.0"
+          "minimum": "0.10.0"
         }
       }
     ]
