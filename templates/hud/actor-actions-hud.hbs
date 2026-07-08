@@ -5,18 +5,18 @@
     <nav class="sheet-tabs tabs" aria-role="Form Tab Navigation">
 
         {{#if hasFavoriteActions}}
-        <a class="{{tabs.favorites.cssClass}}" data-action="tab" data-group="sheet" data-tab="favorites" data-tooltip="crucibletongs.TABS.FAVORITES">
+        <a class="{{tabs.favorites.cssClass}}" data-action="tab" data-group="sheet" data-tab="favorites" data-tooltip="{{tabs.favorites.label}}">
             <i class="tab-icon fa-solid fa-star"></i>
         </a>
         {{/if}}
-        <a class="{{tabs.actions.cssClass}}" data-action="tab" data-group="sheet" data-tab="actions" data-tooltip="crucibletongs.TABS.ACTIONS">
+        <a class="{{tabs.actions.cssClass}}" data-action="tab" data-group="sheet" data-tab="actions" data-tooltip="{{tabs.actions.label}}">
             <img class="tab-icon" src="systems/crucible/ui/tabs/actions.webp">
         </a>
-        <a class="{{tabs.talents.cssClass}}" data-action="tab" data-group="sheet" data-tab="talents" data-tooltip="crucibletongs.TABS.TALENTS">
+        <a class="{{tabs.talents.cssClass}}" data-action="tab" data-group="sheet" data-tab="talents" data-tooltip="{{tabs.talents.label}}">
             <img class="tab-icon" src="systems/crucible/ui/tabs/talents.webp">
         </a>
         <a class="{{tabs.macro.cssClass}}" data-action="tab" data-group="sheet" data-tab="macro"
-            data-tooltip="crucibletongs.TABS.MACRO">
+            data-tooltip="{{tabs.macro.label}}">
             <img class="tab-icon" src="systems/crucible/ui/tabs/biography.webp">
         </a>
         <a data-action="configure" data-tooltip="crucibletongs.SETTINGS.CONFIG.Title">
@@ -48,7 +48,7 @@
         data-tab="{{tabs.talents.id}}">
         <div class="actions-bar" data-tooltip-direction="UP">
             {{#each talents as |action key|}}
-            <div class="slot" type="button" data-type="skill" data-action-id="{{action.id}}" data-action="action" data-key="{{key}}" data-tooltip="{{action.name}}" data-tooltip-class="crucible crucible-tooltip">
+            <div class="slot" type="button" data-type="skill" data-action-id="{{action.id}}" data-action="action" data-key="{{key}}" data-tooltip-html="{{action.tooltip}}" data-tooltip-class="crucible crucible-tooltip">
                 <img src="{{action.img}}" />
             </div>
             {{/each}}

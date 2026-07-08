@@ -33,6 +33,14 @@
             "FAVORITES": "Favorisierte Aktionen"
         },
         "combatTracker": "Kampftracker",
-        "waitInit": "Verzögern"
+        "waitInit": "Verzögern",
+        "HOTBAR": {
+            "WEAPON": {
+                "Equip": "{item} ausrüsten",
+                "Recover": "{item} aufheben",
+                "Drop": "{item} fallen lassen",
+                "UnEquip": "{item} ablegen"
+            }
+        }
     }
 }

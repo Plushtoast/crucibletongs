@@ -1,0 +1,24 @@
+<div class="skill line-item">
+    <header class="action-header">
+        <div class="icon-frame">
+            <img class="icon" src="{{icon}}" alt="{{label}}">
+        </div>
+        <div class="title">
+            <h4>{{label}}</h4>
+            <div class="tags">
+                {{#each abilityAbbrs}}
+                <span class="attribute tag">{{this}}</span>
+                {{/each}}
+                <span class="value" data-tooltip="{{tooltips.value}}">{{scoreFormatted}}</span>
+            </div>
+        </div>
+    </header>
+    <div class="tags">
+        <div class="crucible-rank-pips flexrow">
+            {{#each pips}}<span class="pip {{this}}"></span>{{/each}}
+        </div>
+        {{#each rankTags}}
+        <span class="rank tag">{{this}}</span>
+        {{/each}}
+    </div>
+</div>

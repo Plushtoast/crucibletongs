@@ -1,5 +1,5 @@
 import { CrucibleTongsSettingsConfig } from "./settings-app.js";
-import { defenseTooltip, handleSkillContextAction } from "./utility.js";
+import { defenseTooltip, handleSkillContextAction, skillTooltip } from "./utility.js";
 
 export class HotBarActor extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static AVATAR_RADIUS = 100;
@@ -31,7 +31,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             tabs: [
                 { id: 'favorites', label: 'crucibletongs.TABS.FAVORITES' },
                 { id: 'actions', label: 'crucibletongs.TABS.ACTIONS' },
-                { id: 'talents', label: 'crucibletongs.TABS.TALENTS' },
+                { id: 'talents', label: 'ACTOR.TABS.skills' },
                 { id: 'macro', label: 'crucibletongs.TABS.MACRO' },
             ],
             initial: 'actions',
@@ -77,14 +77,14 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         const context = await super._prepareContext(options);
         this.#setActor();
 
-        this.prepareActorContext(context);
+        await this.prepareActorContext(context);
         context.inCombat = game.combat;
         const token = this.token;
         context.myTurn = context.inCombat && game.combat?.current?.combatantId === token?.combatant?.id;
         return context;
     }
 
-    prepareActorContext(context) {
+    async prepareActorContext(context) {
         if (!this.actor) return context;
 
         context.actor = this.actor;
@@ -99,7 +99,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         context.resources = this.#prepareResources();
         context.defenseTooltip = this.#prepareDefenseTooltip();
         context.weapons = this.#weaponPositions();
-        context.talents = this.#prepareSkills();
+        context.talents = await this.#prepareSkills();
         context.effects = this.#prepareEffects();
         context.slots = ui.hotbar.slots;
     }
@@ -201,17 +201,18 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         }
     }
 
-    #prepareSkills() {
+    async #prepareSkills() {
         const skills = Object.entries(this.actor.skills || {});
 
-        return skills.map(([id, skill], index) => {
+        return Promise.all(skills.map(async ([id]) => {
             const baseSkill = SYSTEM.SKILL.SKILLS[id];
             return {
                 img: baseSkill.icon,
                 id,
-                name: baseSkill.label
+                name: _loc(baseSkill.label),
+                tooltip: await skillTooltip(this.actor, id),
             };
-        });
+        }));
     }
 
     _insertElement(element) {
@@ -388,7 +389,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
                 if (item.system.properties.has("natural")) continue;
 
                 options.push({
-                    name: `${item.system.dropped ? 'Recover' : 'Equip'} ${item.name}`,
+                    name: _loc(`crucibletongs.HOTBAR.WEAPON.${item.system.dropped ? "Recover" : "Equip"}`, { item: item.name }),
                     icon: `<i class='fa-solid ${item.system.dropped ? 'fa-hand-back-fist' : 'fa-shield-plus'}'></i>`,
                     callback: () => this.actor.equipItem(item.id, { equipped: true }),
                 });
@@ -398,13 +399,13 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
         return [
             {
-                name: `Drop ${weapon.name}`,
+                name: _loc("crucibletongs.HOTBAR.WEAPON.Drop", { item: weapon.name }),
                 icon: "<i class='fa-solid fa-hand-point-down'></i>",
                 condition: !weapon.system.dropped,
                 callback: () => this.actor.equipItem(weapon.id, { equipped: false, dropped: true }),
             },
             {
-                name: `Un-equip ${weapon.name}`,
+                name: _loc("crucibletongs.HOTBAR.WEAPON.UnEquip", { item: weapon.name }),
                 icon: "<i class='fa-solid fa-shield-minus'></i>",
                 condition: !weapon.system.dropped,
                 callback: () => this.actor.equipItem(weapon.id, { equipped: false, dropped: false }),

@@ -33,6 +33,14 @@
             "FAVORITES": "Favorite Actions"
         },
         "combatTracker": "Combat Tracker",
-        "waitInit": "Delay"
+        "waitInit": "Delay",
+        "HOTBAR": {
+            "WEAPON": {
+                "Equip": "Equip {item}",
+                "Recover": "Recover {item}",
+                "Drop": "Drop {item}",
+                "UnEquip": "Un-equip {item}"
+            }
+        }
     }
 }

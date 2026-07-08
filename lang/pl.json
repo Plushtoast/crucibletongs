@@ -33,6 +33,14 @@
             "FAVORITES": "Ulubione akcje"
         },
         "combatTracker": "Śledzenie walki",
-        "waitInit": "Opóźnienie"
+        "waitInit": "Opóźnienie",
+        "HOTBAR": {
+            "WEAPON": {
+                "Equip": "Wyposaż {item}",
+                "Recover": "Odzyskaj {item}",
+                "Drop": "Upuść {item}",
+                "UnEquip": "Zdejmij {item}"
+            }
+        }
     }
 }

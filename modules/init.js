@@ -19,7 +19,8 @@ Hooks.on("canvasPan", () => {
 
 Hooks.once("ready", () => {
     foundry.applications.handlebars.loadTemplates([
-        "modules/crucibletongs/templates/tooltip/activeeffect.hbs"
+        "modules/crucibletongs/templates/tooltip/activeeffect.hbs",
+        "modules/crucibletongs/templates/tooltip/skill.hbs"
     ]);
 })
 
