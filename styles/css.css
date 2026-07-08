@@ -567,3 +567,29 @@
 .crucible-tongs-combat-tracker .combatant-advanced i.reversed {
   transform: scaleX(-1);
 }
+.crucible-tongs-combat-tracker .active-combatant-resources {
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.crucible-tongs-combat-tracker .active-combatant-resources .resource-box {
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid var(--color-frame);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+.crucible-tongs-combat-tracker .active-combatant-resources .resource-box.action {
+  --resource-color: #FF9900;
+}
+.crucible-tongs-combat-tracker .active-combatant-resources .resource-box.focus {
+  --resource-color: #0066FF;
+}
+.crucible-tongs-combat-tracker .active-combatant-resources .resource-box.heroism {
+  --resource-color: #ff0059;
+}
+.crucible-tongs-combat-tracker .active-combatant-resources .resource-box .crucible-rank-pips {
+  --pip-size: 10px;
+  --pip-dot-margin: 1px;
+  justify-content: center;
+  gap: 3px;
+}

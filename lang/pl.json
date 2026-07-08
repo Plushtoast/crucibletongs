@@ -5,7 +5,7 @@
             "enableHotBarActor": "Dodaj aktora do paska skrótów",
             "enableHotBarActorHint": "Aktualnie wybrany aktor lub postać zostanie wyświetlona na pasku skrótów.",
             "showFavoriteActions": "Pokaż ulubione akcje",
-            "showFavoriteActionsTabHint": "Pokazuje kartę ulubionych akcji na pasku skrótów aktora, gdy aktor ma ulubione akcje.",
+            "showFavoriteActionsTabHint": "Pokazuje kartę ulubionych na pasku skrótów aktora, gdy aktor ma ulubione akcje lub umiejętności.",
             "enableCombatFlow": "Włącz śledzenie walk",
             "enableCombatFlowHint": "Włącza dodatkowe narzędzie śledzenia walki w Crucible.",
             "iniTrackerCount": "Liczba postaci w module śledzenia walki",
@@ -18,6 +18,8 @@
             "hotbarActionBarMaxWidthHint": "Maksymalna szerokość paska akcji w pikselach, po przekroczeniu której ikony są przenoszone do kolejnego wiersza.",
             "enableCombatPan": "Przejdź do bieżącej tury",
             "enableCombatPanHint": "Przesuń widok na bieżącą turę i wybierz token, jeśli dostępne są odpowiednie uprawnienia.",
+            "showIniTrackerActionPips": "Pokaż punkty akcji w śledzeniu walki",
+            "showIniTrackerActionPipsHint": "Pokazuje punkty akcji, skupienia i heroizmu aktywnego uczestnika walki pod przyciskami sterowania turą w śledzeniu walki.",
             "CONFIG": {
                 "Title": "Konfiguracja Crucible Tongs",
                 "Saved": "Ustawienia Crucible Tongs zostały zapisane.",
@@ -30,11 +32,17 @@
             "MACRO": "Makra",
             "ACTIONS": "Akcje",
             "TALENTS": "Talenty",
-            "FAVORITES": "Ulubione akcje"
+            "FAVORITES": "Ulubione"
         },
         "combatTracker": "Śledzenie walki",
         "waitInit": "Opóźnienie",
         "HOTBAR": {
+            "ACTION": {
+                "Use": "Użyj {name}"
+            },
+            "SKILL": {
+                "BlindRoll": "Ukryty rzut"
+            },
             "WEAPON": {
                 "Equip": "Wyposaż {item}",
                 "Recover": "Odzyskaj {item}",

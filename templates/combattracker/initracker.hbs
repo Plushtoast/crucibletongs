@@ -16,16 +16,7 @@
         <ul class="iniTrackerList flex1">
             {{#each turns}}
             <li data-tooltip-html="{{defenseTooltip}}" data-combatant-id="{{id}}" data-action="activateCombatant" data-tooltip-class="crucible crucible-tooltip" class="combatant iniItem {{css}}" style="background-image:url('{{img}}');">
-                <div class="combatant-advanced">
-                    {{#if showActionPips}}
-                    <div class="pips flexrow"
-                        data-tooltip="{{actionLabel}} {{actionValue}}/{{actionMax}}">
-                        {{#each actionPips as |pip|}}
-                        <div class="pip {{pip.cssClass}}"></div>
-                        {{/each}}
-                    </div>
-                    {{/if}}
-                </div>
+                <div class="combatant-advanced"></div>
                 {{#if isOwner}}
                 <div class="item-structure" style="--a: {{maxLP}}; --b: {{currentLP}}">
                     <div class="inner"></div>
@@ -93,6 +84,34 @@
         <button type="button" class="combat-control frame-brown {{ifThen isLastTurn 'lastRound' ''}}" data-action="nextTurn">{{localize (ifThen isLastTurn 'COMBAT.RoundNext' 'COMBAT.TurnEnd')}}</button>
         <button type="button" class="combat-control frame-brown" data-action="waitInit">{{localize 'crucibletongs.waitInit'}}</button>
     </div>    
+    {{/if}}
+    {{#if showActiveCombatantActions}}
+    <div class="active-combatant-resources flexrow">
+        <div class="resource-box action"
+            data-tooltip="{{activeCombatantResources.action.label}} {{activeCombatantResources.action.value}}/{{activeCombatantResources.action.max}}">
+            <div class="crucible-rank-pips flexrow">
+                {{#each activeCombatantResources.action.pips as |pip|}}
+                <span class="pip {{pip.cssClass}}"></span>
+                {{/each}}
+            </div>
+        </div>
+        <div class="resource-box focus"
+            data-tooltip="{{activeCombatantResources.focus.label}} {{activeCombatantResources.focus.value}}/{{activeCombatantResources.focus.max}}">
+            <div class="crucible-rank-pips flexrow">
+                {{#each activeCombatantResources.focus.pips as |pip|}}
+                <span class="pip {{pip.cssClass}}"></span>
+                {{/each}}
+            </div>
+        </div>
+        <div class="resource-box heroism"
+            data-tooltip="{{activeCombatantResources.heroism.label}} {{activeCombatantResources.heroism.value}}/{{activeCombatantResources.heroism.max}}">
+            <div class="crucible-rank-pips flexrow">
+                {{#each activeCombatantResources.heroism.pips as |pip|}}
+                <span class="pip {{pip.cssClass}}"></span>
+                {{/each}}
+            </div>
+        </div>
+    </div>
     {{/if}}
     {{/unless}}
 </div>

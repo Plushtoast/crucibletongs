@@ -691,4 +691,36 @@
             }
         }
     }
+
+    .active-combatant-resources {
+        justify-content: center;
+        gap: 6px;
+        margin-top: 4px;
+
+        .resource-box {
+            background: rgba(0, 0, 0, 0.65);
+            border: 1px solid var(--color-frame);
+            border-radius: 6px;
+            padding: 4px 6px;
+
+            &.action {
+                --resource-color: #FF9900;
+            }
+
+            &.focus {
+                --resource-color: #0066FF;
+            }
+
+            &.heroism {
+                --resource-color: #ff0059;
+            }
+
+            .crucible-rank-pips {
+                --pip-size: 10px;
+                --pip-dot-margin: 1px;
+                justify-content: center;
+                gap: 3px;
+            }
+        }
+    }
 }

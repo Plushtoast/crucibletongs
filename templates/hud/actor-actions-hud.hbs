@@ -28,7 +28,7 @@
     <section class="tab flexcol {{tabs.favorites.cssClass}}" data-group="{{tabs.favorites.group}}" data-tab="{{tabs.favorites.id}}">
         <div class="actions-bar" data-tooltip-direction="UP">
             {{#each favoriteActions as |action key|}}
-            <div class="slot" type="button" data-type="action" data-action="action" data-key="{{key}}" data-uuid="{{../actor.uuid}}" data-crucible-tooltip="action" data-tooltip-class="crucible crucible-tooltip" data-tooltip="{{action.name}}" data-action-id="{{key}}">
+            <div class="slot" type="button" data-type="{{action.type}}" data-action="action" data-key="{{key}}" data-uuid="{{../actor.uuid}}" data-tooltip-class="crucible crucible-tooltip" data-action-id="{{action.id}}" {{#if action.isAction}}data-crucible-tooltip="action" data-tooltip="{{action.name}}"{{else}}data-tooltip-html="{{action.tooltip}}"{{/if}}>
                 <img src="{{action.img}}" />
             </div>
             {{/each}}

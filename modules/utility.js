@@ -65,6 +65,81 @@ function formatSignedNumber(value) {
   return value >= 0 ? `+${value}` : `${value}`;
 }
 
+/**
+ * Whether the current user may view a combatant's action points.
+ * @param {Actor} actor
+ * @returns {boolean}
+ */
+export function canViewCombatantActions(actor) {
+  return game.user.isGM || actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED);
+}
+
+/**
+ * Prepare action point pip display data matching the actor hotbar.
+ * @param {object} actionResource
+ * @returns {object}
+ */
+export function prepareActionPips(actionResource) {
+  const resource = foundry.utils.mergeObject(SYSTEM.RESOURCES.action, actionResource, { inplace: false });
+  resource.pips = [];
+  const maxAction = Math.min(resource.max, 6);
+  for (let i = 1; i <= maxAction; i++) {
+    const full = resource.value >= i;
+    const double = (resource.value - 6) >= i;
+    const cssClass = [full ? "full" : "", double ? "double" : ""].filterJoin(" ");
+    resource.pips.push({ full, double, cssClass });
+  }
+  return resource;
+}
+
+/**
+ * Prepare focus pip display data matching the actor hotbar.
+ * @param {object} focusResource
+ * @returns {object}
+ */
+export function prepareFocusPips(focusResource) {
+  const resource = foundry.utils.mergeObject(SYSTEM.RESOURCES.focus, focusResource, { inplace: false });
+  resource.pips = [];
+  const maxFocus = Math.min(resource.max, 12);
+  for (let i = 1; i <= maxFocus; i++) {
+    const full = resource.value >= i;
+    const double = (resource.value - 12) >= i;
+    const cssClass = [full ? "full" : "", double ? "double" : ""].filterJoin(" ");
+    resource.pips.push({ full, double, cssClass });
+  }
+  return resource;
+}
+
+/**
+ * Prepare heroism pip display data matching the actor hotbar.
+ * @param {object} heroismResource
+ * @returns {object}
+ */
+export function prepareHeroismPips(heroismResource) {
+  const resource = foundry.utils.mergeObject(SYSTEM.RESOURCES.heroism, heroismResource, { inplace: false });
+  resource.pips = [];
+  for (let i = 1; i <= 3; i++) {
+    const full = resource.value >= i;
+    const cssClass = full ? "full" : "";
+    resource.pips.push({ full, double: false, cssClass });
+  }
+  return resource;
+}
+
+/**
+ * Prepare combat resource pip display data for the active combatant.
+ * @param {Actor} actor
+ * @returns {object}
+ */
+export function prepareActiveCombatantResources(actor) {
+  const resources = actor.system.resources;
+  return {
+    action: prepareActionPips(resources.action),
+    focus: prepareFocusPips(resources.focus),
+    heroism: prepareHeroismPips(resources.heroism),
+  };
+}
+
 export async function handleSkillContextAction(actor, skillId) {
   if (!actor || !skillId) return null;
 
@@ -81,4 +156,55 @@ export async function handleSkillContextAction(actor, skillId) {
   }
 
   return actor.rollSkill(skillId, { dialog: true, messageMode: "blind" });
+}
+
+/**
+ * @param {CrucibleActor} actor
+ * @returns {Set<string>}
+ */
+export function getSkillFavorites(actor) {
+  return new Set(actor?.getFlag("crucibletongs", "skillFavorites") ?? []);
+}
+
+/**
+ * @param {CrucibleActor} actor
+ * @param {string} skillId
+ * @returns {boolean}
+ */
+export function isSkillFavorite(actor, skillId) {
+  return getSkillFavorites(actor).has(skillId);
+}
+
+/**
+ * @param {CrucibleActor} actor
+ * @param {string} skillId
+ * @returns {Promise<void>}
+ */
+export async function toggleSkillFavorite(actor, skillId) {
+  if (!actor?.skills?.[skillId]) return;
+
+  const favorites = getSkillFavorites(actor);
+  if (favorites.has(skillId)) favorites.delete(skillId);
+  else favorites.add(skillId);
+  await actor.setFlag("crucibletongs", "skillFavorites", [...favorites]);
+}
+
+/**
+ * @param {CrucibleActor} actor
+ * @param {string} actionId
+ * @returns {Promise<void>}
+ */
+export async function toggleActionFavorite(actor, actionId) {
+  const action = actor?.actions?.[actionId];
+  if (!action) return;
+
+  const priorFavorites = actor.system.favorites;
+  const favorites = new Set();
+  for (const entry of Object.values(actor.actions)) {
+    if (priorFavorites.has(entry.id)) favorites.add(entry.id);
+  }
+
+  if (favorites.has(action.id)) favorites.delete(action.id);
+  else favorites.add(action.id);
+  await actor.update({ "system.favorites": favorites });
 }

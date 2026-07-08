@@ -43,6 +43,17 @@ Hooks.once('init', () => {
             default: true,
             type: Boolean,
         },
+        showIniTrackerActionPips: {
+            name: 'crucibletongs.SETTINGS.showIniTrackerActionPips',
+            hint: 'crucibletongs.SETTINGS.showIniTrackerActionPipsHint',
+            scope: 'client',
+            config: true,
+            default: true,
+            type: Boolean,
+            onChange: async () => {
+                if (game.combat) game.modules.get("crucibletongs").api.combatTracker.render(true, { focus: false });
+            },
+        },
         iniTrackerSize: {
             name: 'crucibletongs.SETTINGS.iniTrackerSize',
             hint: 'crucibletongs.SETTINGS.iniTrackerSizeHint',

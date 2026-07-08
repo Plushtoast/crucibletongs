@@ -5,7 +5,7 @@
             "enableHotBarActor": "Aktiviere den Hotbar-Actor",
             "enableHotBarActorHint": "Der aktuell ausgewählte Akteur oder Charakter wird an der Hotbar angezeigt.",
             "showFavoriteActions": "Favorisierte Aktionen anzeigen",
-            "showFavoriteActionsTabHint": "Zeigt einen Tab für favorisierte Aktionen in der Actor-Hotbar an, wenn der Akteur favorisierte Aktionen hat.",
+            "showFavoriteActionsTabHint": "Zeigt einen Favoriten-Tab in der Actor-Hotbar an, wenn der Akteur favorisierte Aktionen oder Fertigkeiten hat.",
             "enableCombatFlow": "Kampftracker aktivieren",
             "enableCombatFlowHint": "Aktiviere den zusätzlichen Crucible Kampftracker.",
             "iniTrackerCount": "Kampftracker Anzahl",
@@ -18,6 +18,8 @@
             "hotbarActionBarMaxWidthHint": "Maximale Breite der Aktionsleiste in Pixeln, bevor Icons in eine neue Zeile umbrechen.",
             "enableCombatPan": "Schwenke zu aktuellem Zug",
             "enableCombatPanHint": "Schwenke die Sicht auf den aktuellen Zug und selektiere den Token sofern Besitzerrechte vorhanden.",
+            "showIniTrackerActionPips": "Aktionspunkte im Kampftracker anzeigen",
+            "showIniTrackerActionPipsHint": "Zeigt die Aktions-, Fokus- und Heldenpunkte des aktiven Kampfteilnehmers unter den Zugsteuerungen im Kampftracker an.",
             "CONFIG": {
                 "Title": "Crucible Tongs Konfiguration",
                 "Saved": "Crucible Tongs Einstellungen gespeichert.",
@@ -30,11 +32,17 @@
             "MACRO": "Makros",
             "ACTIONS": "Aktionen",
             "TALENTS": "Talente",
-            "FAVORITES": "Favorisierte Aktionen"
+            "FAVORITES": "Favoriten"
         },
         "combatTracker": "Kampftracker",
         "waitInit": "Verzögern",
         "HOTBAR": {
+            "ACTION": {
+                "Use": "{name} verwenden"
+            },
+            "SKILL": {
+                "BlindRoll": "Verdeckter Wurf"
+            },
             "WEAPON": {
                 "Equip": "{item} ausrüsten",
                 "Recover": "{item} aufheben",

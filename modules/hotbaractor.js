@@ -1,5 +1,16 @@
 import { CrucibleTongsSettingsConfig } from "./settings-app.js";
-import { defenseTooltip, handleSkillContextAction, skillTooltip } from "./utility.js";
+import {
+    defenseTooltip,
+    getSkillFavorites,
+    handleSkillContextAction,
+    isSkillFavorite,
+    prepareActionPips,
+    prepareFocusPips,
+    prepareHeroismPips,
+    skillTooltip,
+    toggleActionFavorite,
+    toggleSkillFavorite,
+} from "./utility.js";
 
 export class HotBarActor extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static AVATAR_RADIUS = 100;
@@ -89,7 +100,8 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
         context.actor = this.actor;
         context.actions = this.#prepareActions();
-        context.favoriteActions = this.#prepareFavoriteActions(context.actions);
+        context.talents = await this.#prepareSkills();
+        context.favoriteActions = this.#prepareFavoriteEntries(context.actions, context.talents);
         context.hasFavoriteActions = game.settings.get("crucibletongs", "showFavoriteActionsTab") && Object.keys(context.favoriteActions).length > 0;
         if (!context.hasFavoriteActions && this.tabGroups?.sheet === "favorites") {
             this.tabGroups.sheet = "actions";
@@ -99,7 +111,6 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         context.resources = this.#prepareResources();
         context.defenseTooltip = this.#prepareDefenseTooltip();
         context.weapons = this.#weaponPositions();
-        context.talents = await this.#prepareSkills();
         context.effects = this.#prepareEffects();
         context.slots = ui.hotbar.slots;
     }
@@ -131,12 +142,32 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         return sorted;
     }
 
-    #prepareFavoriteActions(actions) {
+    #prepareFavoriteEntries(actions, talents) {
         const favorites = {};
         for (const [id, action] of Object.entries(actions)) {
             if (!((action.isFavorite || action.autoFavorite) && action._displayOnSheet())) continue;
-            favorites[id] = action;
+            favorites[`action:${id}`] = {
+                type: "action",
+                id,
+                img: action.img,
+                name: action.name,
+                isAction: true,
+            };
         }
+
+        const skillFavorites = getSkillFavorites(this.actor);
+        for (const talent of talents) {
+            if (!skillFavorites.has(talent.id)) continue;
+            favorites[`skill:${talent.id}`] = {
+                type: "skill",
+                id: talent.id,
+                img: talent.img,
+                name: talent.name,
+                tooltip: talent.tooltip,
+                isAction: false,
+            };
+        }
+
         return Object.fromEntries(Object.entries(favorites).sort(([, a], [, b]) => a.name.localeCompare(b.name)));
     }
 
@@ -158,8 +189,10 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         ];
 
         const positions = [];
-        const actorWeapons = this.actor.equipment.weapons;
-        const isAnimal = actorWeapons.natural.length > 0;
+        const actorWeapons = this.actor.equipment?.weapons;
+        if (!actorWeapons) return positions;
+
+        const isAnimal = (actorWeapons.natural?.length ?? 0) > 0;
         let positionIndex = 0;
 
         if (!isAnimal) {
@@ -173,19 +206,22 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
     #addHumanoidWeapons(positions, weapons, weaponPositions, startIndex) {
         let positionIndex = startIndex;
+        const mainhand = weapons.mainhand;
 
-        positions.push({
-            weapon: weapons.mainhand,
-            style: weaponPositions[positionIndex++]
-        });
+        if (mainhand) {
+            positions.push({
+                weapon: mainhand,
+                style: weaponPositions[positionIndex++]
+            });
+        }
 
-        const isTwoHanded = weapons.mainhand.system.config.category.hands > 1;
-        const secondWeapon = isTwoHanded ? weapons.mainhand : weapons.offhand;
-
-        positions.push({
-            weapon: secondWeapon,
-            style: weaponPositions[positionIndex]
-        });
+        const secondWeapon = weapons.twoHanded ? mainhand : weapons.offhand;
+        if (secondWeapon && positionIndex < weaponPositions.length) {
+            positions.push({
+                weapon: secondWeapon,
+                style: weaponPositions[positionIndex]
+            });
+        }
     }
 
     #addAnimalWeapons(positions, naturalWeapons, weaponPositions) {
@@ -236,33 +272,9 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             resources[r.id] = r;
         }
 
-        // Action
-        resources.action.pips = [];
-        const maxAction = Math.min(resources.action.max, 6);
-        for (let i = 1; i <= maxAction; i++) {
-            const full = resources.action.value >= i;
-            const double = (resources.action.value - 6) >= i;
-            const cssClass = [full ? "full" : "", double ? "double" : ""].filterJoin(" ");
-            resources.action.pips.push({ full, double, cssClass });
-        }
-
-        // Focus
-        resources.focus.pips = [];
-        const maxFocus = Math.min(resources.focus.max, 12);
-        for (let i = 1; i <= maxFocus; i++) {
-            const full = resources.focus.value >= i;
-            const double = (resources.focus.value - 12) >= i;
-            const cssClass = [full ? "full" : "", double ? "double" : ""].filterJoin(" ");
-            resources.focus.pips.push({ full, double, cssClass });
-        }
-
-        // Heroism
-        resources.heroism.pips = [];
-        for (let i = 1; i <= 3; i++) {
-            const full = resources.heroism.value >= i;
-            const cssClass = full ? "full" : "";
-            resources.heroism.pips.push({ full, double: false, cssClass });
-        }
+        resources.action = prepareActionPips(resources.action);
+        resources.focus = prepareFocusPips(resources.focus);
+        resources.heroism = prepareHeroismPips(resources.heroism);
         return resources;
     }
 
@@ -278,10 +290,6 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             if (this.actor) this.actor.sheet.render(true);
         });
 
-        for (const skill of this.element.querySelectorAll("[data-type='skill']")) {
-            skill.addEventListener('contextmenu', this.#onSkillContext.bind(this));
-        }
-
         new foundry.applications.ux.DragDrop.implementation({
             dragSelector: "[data-type='action']",
             dropSelector: '.slot',
@@ -293,12 +301,6 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         }).bind(this.element);
 
         ui.hotbar.element.hidden = !!this.actor;
-    }
-
-    async #onSkillContext(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        await handleSkillContextAction(this.actor, event.currentTarget.dataset.actionId);
     }
 
     #onDragStart(event) {
@@ -368,6 +370,77 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             fixed: true,
             eventName: 'click'
         });
+
+        new foundry.applications.ux.ContextMenu(this.element, '.actions-bar .slot[data-type="action"], .actions-bar .slot[data-type="skill"]', [], {
+            onOpen: this.#onSlotContext.bind(this),
+            jQuery: false,
+            fixed: true,
+        });
+    }
+
+    #onSlotContext(target) {
+        const { type, actionId } = target.dataset;
+        if (type === "action") ui.context.menuItems = this.#getActionContextOptions(actionId);
+        else if (type === "skill") ui.context.menuItems = this.#getSkillContextOptions(actionId);
+    }
+
+    #getActionContextOptions(actionId) {
+        const action = this.actor?.actions?.[actionId];
+        if (!action) return [];
+
+        const isFavorite = action.isFavorite;
+        return [
+            {
+                label: _loc("crucibletongs.HOTBAR.ACTION.Use", { name: action.name }),
+                icon: "fa-solid fa-hand-fist",
+                onClick: () => this.actor.useAction(actionId),
+            },
+            {
+                label: _loc(isFavorite ? "ACTION.ACTIONS.RemoveFavorite" : "ACTION.ACTIONS.AddFavorite"),
+                icon: isFavorite ? "fa-solid fa-star" : "fa-regular fa-star",
+                onClick: async () => {
+                    await toggleActionFavorite(this.actor, actionId);
+                    this.render(true, { focus: false });
+                },
+            },
+        ];
+    }
+
+    #getSkillContextOptions(skillId) {
+        const config = SYSTEM.SKILL.SKILLS[skillId];
+        const skill = this.actor?.skills?.[skillId];
+        if (!config || !skill) return [];
+
+        const skillName = _loc(config.label);
+        const isFavorite = isSkillFavorite(this.actor, skillId);
+        const alternateRoll = game.user.isGM
+            ? {
+                label: _loc("DICE.REQUESTS.RequestRolls"),
+                icon: "fa-solid fa-users",
+                onClick: () => handleSkillContextAction(this.actor, skillId),
+            }
+            : {
+                label: _loc("crucibletongs.HOTBAR.SKILL.BlindRoll"),
+                icon: "fa-solid fa-eye-slash",
+                onClick: () => handleSkillContextAction(this.actor, skillId),
+            };
+
+        return [
+            {
+                label: _loc("ACTOR.ACTIONS.RollCheck"),
+                icon: "fa-solid fa-dice",
+                onClick: () => this.actor.rollSkill(skillId, { dialog: true }),
+            },
+            alternateRoll,
+            {
+                label: _loc(isFavorite ? "ACTION.ACTIONS.RemoveFavorite" : "ACTION.ACTIONS.AddFavorite"),
+                icon: isFavorite ? "fa-solid fa-star" : "fa-regular fa-star",
+                onClick: async () => {
+                    await toggleSkillFavorite(this.actor, skillId);
+                    this.render(true, { focus: false });
+                },
+            },
+        ];
     }
 
     #onWeaponContext(target) {

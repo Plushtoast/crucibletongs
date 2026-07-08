@@ -88,6 +88,16 @@ Hooks.on('updateCombat', (combat, changed, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
 });
 
+Hooks.on('updateActor', (actor, updates) => {
+    if (!game.settings.get('crucibletongs', 'enableCombatFlow') || !game.settings.get('crucibletongs', 'showIniTrackerActionPips')) return;
+    if (!game.combat?.started) return;
+    const combatTracker = game.modules.get("crucibletongs").api.combatTracker;
+    if (!combatTracker.combatData) return;
+    if (game.combat.combatant?.actor?.id !== actor.id) return;
+    if (!foundry.utils.hasProperty(updates, 'system.resources')) return;
+    combatTracker.render(true, { focus: false });
+});
+
 Hooks.on('createCombat', (combat, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
 });

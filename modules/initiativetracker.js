@@ -1,4 +1,4 @@
-import { defenseTooltip } from "./utility.js";
+import { canViewCombatantActions, defenseTooltip, prepareActiveCombatantResources } from "./utility.js";
 
 const { mergeObject, duplicate } = foundry.utils;
 
@@ -137,10 +137,26 @@ export class CrucibleCombatTracker extends foundry.applications.api.HandlebarsAp
         data.currentRound = data.combat.round;
         data.nextRound = data.combat.round + 1;
 
+        data.showActiveCombatantActions = false;
+        if (game.settings.get('crucibletongs', 'showIniTrackerActionPips') && combatStarted) {
+            const activeTurn = data.turns?.find((turn) => turn.active) ?? data.turns?.[0];
+            if (activeTurn) {
+                const activeCombatant = data.combat.combatants.get(activeTurn.id);
+                if (activeCombatant?.actor && canViewCombatantActions(activeCombatant.actor)) {
+                    data.showActiveCombatantActions = true;
+                    data.activeCombatantResources = prepareActiveCombatantResources(activeCombatant.actor);
+                }
+            }
+        }
+
         const calculatedWidth = itemWidth * actorCount + actorCount * 3 + 70;
         const minWidth = 250;
         options.position.width = Math.max(calculatedWidth, minWidth);
-        options.position.height = itemWidth + 10;
+
+        let extraHeight = 0;
+        if (combatStarted && (data.control || game.user.isGM)) extraHeight += 28;
+        if (data.showActiveCombatantActions) extraHeight += 22;
+        options.position.height = itemWidth + 10 + extraHeight;
 
         Object.assign(data, {
             itemWidth,

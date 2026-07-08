@@ -5,7 +5,7 @@
             "enableHotBarActor": "Enable Actor on Hotbar",
             "enableHotBarActorHint": "The current selected actor or character will be shown on the hotbar.",
             "showFavoriteActions": "Show Favorite Actions",
-            "showFavoriteActionsTabHint": "Show a favorite actions tab on the actor hotbar when the actor has favorite actions.",
+            "showFavoriteActionsTabHint": "Show a favorites tab on the actor hotbar when the actor has favorite actions or skills.",
             "enableCombatFlow": "Enable Combat Tracker",
             "enableCombatFlowHint": "Enables the additional Crucible Combat Tracker.",
             "iniTrackerCount": "Combat Tracker Count",
@@ -18,6 +18,8 @@
             "hotbarActionBarMaxWidthHint": "Maximum width of the action bar in pixels before icons wrap to a new line.",
             "enableCombatPan": "Pan to Current Turn",
             "enableCombatPanHint": "Pan the view to the current turn and select the token if ownership rights are available.",
+            "showIniTrackerActionPips": "Show Action Points in Combat Tracker",
+            "showIniTrackerActionPipsHint": "Show the active combatant's action, focus, and heroism points below the turn controls in the combat tracker.",
             "CONFIG": {
                 "Title": "Crucible Tongs Configuration",
                 "Saved": "Crucible Tongs settings saved.",
@@ -30,11 +32,17 @@
             "MACRO": "Macros",
             "ACTIONS": "Actions",
             "TALENTS": "Talents",
-            "FAVORITES": "Favorite Actions"
+            "FAVORITES": "Favorites"
         },
         "combatTracker": "Combat Tracker",
         "waitInit": "Delay",
         "HOTBAR": {
+            "ACTION": {
+                "Use": "Use {name}"
+            },
+            "SKILL": {
+                "BlindRoll": "Blind Roll"
+            },
             "WEAPON": {
                 "Equip": "Equip {item}",
                 "Recover": "Recover {item}",
