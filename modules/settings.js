@@ -109,17 +109,17 @@ Hooks.once('init', () => {
                 if (instance) instance.render(true, { focus: false });
             },
         },
-        hotbarActionBarMaxWidth: {
-            name: 'crucibletongs.SETTINGS.hotbarActionBarMaxWidth',
-            hint: 'crucibletongs.SETTINGS.hotbarActionBarMaxWidthHint',
+        hotbarActionBarColumns: {
+            name: 'crucibletongs.SETTINGS.hotbarActionBarColumns',
+            hint: 'crucibletongs.SETTINGS.hotbarActionBarColumnsHint',
             scope: 'client',
             config: true,
-            default: 300,
+            default: 6,
             type: Number,
             range: {
-                min: 120,
-                max: 1000,
-                step: 10,
+                min: 3,
+                max: 15,
+                step: 1,
             },
             onChange: async () => {
                 const instance = foundry.applications.instances.get("actor-hud");

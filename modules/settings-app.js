@@ -86,7 +86,7 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
             "enableHotBarActor",
             "showFavoriteActionsTab",
             "hotbarActorScale",
-            "hotbarActionBarMaxWidth",
+            "hotbarActionBarColumns",
             "hotbarActionBarRows",
         ],
         combat: [

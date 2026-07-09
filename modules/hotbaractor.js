@@ -18,6 +18,13 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     static WEAPON_RADIUS = 40;
     static ACTION_BAR_SLOT_SIZE = 40;
     static ACTION_BAR_GAP = 4;
+    static ACTION_BAR_SCROLLBAR_PADDING = 8;
+
+    static getActionBarWidth(columns) {
+        const { ACTION_BAR_SLOT_SIZE: slotSize, ACTION_BAR_GAP: gap, ACTION_BAR_SCROLLBAR_PADDING: scrollbarPadding } = HotBarActor;
+        const cols = Math.max(1, columns);
+        return cols * slotSize + Math.max(0, cols - 1) * gap + scrollbarPadding;
+    }
 
     #dropTarget;
     #macroDragSlot;
@@ -161,11 +168,9 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     }
 
     #getActionBarLayout() {
-        const width = game.settings.get("crucibletongs", "hotbarActionBarMaxWidth") ?? 300;
+        const columns = game.settings.get("crucibletongs", "hotbarActionBarColumns") ?? 6;
         const rows = game.settings.get("crucibletongs", "hotbarActionBarRows") ?? 3;
-        const { ACTION_BAR_SLOT_SIZE: slotSize, ACTION_BAR_GAP: gap } = HotBarActor;
-        const columns = Math.max(1, Math.floor((width + gap) / (slotSize + gap)));
-        return { columns, rows, total: columns * rows };
+        return { columns: Math.max(1, columns), rows, total: Math.max(1, columns) * rows };
     }
 
     #prepareActionBarSlots(items) {
@@ -373,10 +378,9 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         await super._onRender(context, options);
 
         const scale = game.settings.get("crucibletongs", "hotbarActorScale") ?? 1;
-        const maxWidth = game.settings.get("crucibletongs", "hotbarActionBarMaxWidth") ?? 300;
-        const rows = game.settings.get("crucibletongs", "hotbarActionBarRows") ?? 3;
+        const { columns, rows } = this.#getActionBarLayout();
         this.element.style.setProperty("--hotbarActorScale", scale);
-        this.element.style.setProperty("--hotbarActionBarWidth", `${maxWidth}px`);
+        this.element.style.setProperty("--hotbarActionBarWidth", `${HotBarActor.getActionBarWidth(columns)}px`);
         this.element.style.setProperty("--hotbarActionBarRows", rows);
 
         this.element.querySelector('.avatar')?.addEventListener('dblclick', () => {

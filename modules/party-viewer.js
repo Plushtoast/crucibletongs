@@ -54,6 +54,7 @@ export class CruciblePartyViewer extends foundry.applications.api.HandlebarsAppl
   };
 
   #draggable;
+  #highlighted;
 
   static PORTRAIT_SIZE_MIN = 48;
   static PORTRAIT_SIZE_MAX = 120;
@@ -113,15 +114,42 @@ export class CruciblePartyViewer extends foundry.applications.api.HandlebarsAppl
       container.oncontextmenu = (ev) => this.#onDragContextMenu(ev);
     }
 
+    this.#clearHover();
+
     const portraits = this.element.querySelectorAll(".party-member");
     portraits.forEach((portrait) => {
+      portrait.addEventListener("pointerover", this.#onCombatantHoverIn.bind(this));
+      portrait.addEventListener("pointerout", this.#onCombatantHoverOut.bind(this));
       portrait.addEventListener("dblclick", this.#onPortraitDblClick.bind(this));
     });
   }
 
   _onClose(options) {
     super._onClose(options);
+    this.#clearHover();
     this.#draggable = null;
+  }
+
+  #clearHover() {
+    this.#highlighted?._onHoverOut({});
+    this.#highlighted = null;
+  }
+
+  #onCombatantHoverIn(event) {
+    if (!canvas.ready) return;
+    const { combatantId } = event.currentTarget?.dataset ?? {};
+    if (!combatantId) return;
+    const combatant = game.combat?.combatants.get(combatantId);
+    const token = combatant?.token?.object;
+    if (token && token._canHover(game.user, event) && ui.combat._isTokenVisible(token)) {
+      token._onHoverIn(event, { hoverOutOthers: true });
+      this.#highlighted = token;
+    }
+  }
+
+  #onCombatantHoverOut(event) {
+    this.#highlighted?._onHoverOut(event);
+    this.#highlighted = null;
   }
 
   async #onWheelResize(ev) {

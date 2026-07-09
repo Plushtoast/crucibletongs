@@ -59,9 +59,10 @@
     --hover-color: #c41e3a;
     --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
     --hotbarActorScale: 1;
-    --hotbarActionBarWidth: 300px;
+    --hotbarActionBarWidth: 268px;
     --hotbarActionBarSlotSize: 40px;
     --hotbarActionBarGap: 4px;
+    --hotbarActionBarScrollbarPadding: 8px;
     --hotbarActionBarRows: 3;
     --hotbarActionBarHeight: calc(var(--hotbarActionBarSlotSize) * var(--hotbarActionBarRows) + var(--hotbarActionBarGap) * (var(--hotbarActionBarRows) - 1));
 
@@ -164,11 +165,13 @@
         align-items: start;
         align-content: flex-start;
         gap: var(--hotbarActionBarGap);
+        box-sizing: border-box;
         width: var(--hotbarActionBarWidth);
         min-width: var(--hotbarActionBarWidth);
         max-width: var(--hotbarActionBarWidth);
         min-height: var(--hotbarActionBarHeight);
         max-height: var(--hotbarActionBarHeight);
+        padding-right: var(--hotbarActionBarScrollbarPadding);
         overflow-y: auto;
         overflow-x: hidden;
         transition: all 0.3s ease-in-out;
