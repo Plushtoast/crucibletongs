@@ -1,17 +1,43 @@
 <div class="flex0 actor-part" data-tooltip-direction="UP">
     <div class="flexrow resources">
-        <div class="flex0 resource-pair {{#unless resources.wounds.value}}single-resource{{/unless}}" data-tooltip-html="{{resources.health.label}} {{resources.health.value}}/{{resources.health.max}}{{#if resources.wounds.value}}<br>{{resources.wounds.label}} {{resources.wounds.value}}/{{resources.wounds.max}}{{/if}}"
-            style="--resource-accent: {{resources.health.color.high}};">
-            <div class="resource-current">{{resources.health.value}}/{{resources.health.max}}</div>
+        <div class="flex0 resource-pair resource-health {{#unless resources.wounds.value}}single-resource{{/unless}}"
+            data-tooltip-html="{{resources.health.label}} {{resources.health.value}}/{{resources.health.max}}{{#if resources.wounds.value}}<br>{{resources.wounds.label}} {{resources.wounds.value}}/{{resources.wounds.max}}{{/if}}"
+            style="--resource-accent: {{resources.health.accentColor}};">
+            <div class="resource-row">
+                <i class="resource-icon fas {{resources.health.icon}}" aria-hidden="true"></i>
+                <div class="resource-bar">
+                    <span class="resource-bar-fill" style="width: {{resources.health.fillPct}}; background: {{resources.health.barColor}};"></span>
+                    <span class="resource-value">{{resources.health.value}}/{{resources.health.max}}</span>
+                </div>
+            </div>
             {{#if resources.wounds.value}}
-            <div class="resource-secondary">{{resources.wounds.value}}/{{resources.wounds.max}}</div>
+            <div class="resource-row secondary">
+                <i class="resource-icon fas {{resources.wounds.icon}}" aria-hidden="true"></i>
+                <div class="resource-bar">
+                    <span class="resource-bar-fill" style="width: {{resources.wounds.fillPct}}; background: {{resources.wounds.barColor}};"></span>
+                    <span class="resource-value">{{resources.wounds.value}}/{{resources.wounds.max}}</span>
+                </div>
+            </div>
             {{/if}}
         </div>
-        <div class="flex0 resource-pair {{#unless resources.madness.value}}single-resource{{/unless}}" data-tooltip-html="{{resources.morale.label}} {{resources.morale.value}}/{{resources.morale.max}}{{#if resources.madness.value}}<br>{{resources.madness.label}} {{resources.madness.value}}/{{resources.madness.max}}{{/if}}"
-            style="--resource-accent: {{resources.morale.color.high}};">
-            <div class="resource-current">{{resources.morale.value}}/{{resources.morale.max}}</div>
+        <div class="flex0 resource-pair resource-morale {{#unless resources.madness.value}}single-resource{{/unless}}"
+            data-tooltip-html="{{resources.morale.label}} {{resources.morale.value}}/{{resources.morale.max}}{{#if resources.madness.value}}<br>{{resources.madness.label}} {{resources.madness.value}}/{{resources.madness.max}}{{/if}}"
+            style="--resource-accent: {{resources.morale.accentColor}};">
+            <div class="resource-row">
+                <i class="resource-icon fas {{resources.morale.icon}}" aria-hidden="true"></i>
+                <div class="resource-bar">
+                    <span class="resource-bar-fill" style="width: {{resources.morale.fillPct}}; background: {{resources.morale.barColor}};"></span>
+                    <span class="resource-value">{{resources.morale.value}}/{{resources.morale.max}}</span>
+                </div>
+            </div>
             {{#if resources.madness.value}}
-            <div class="resource-secondary">{{resources.madness.value}}/{{resources.madness.max}}</div>
+            <div class="resource-row secondary">
+                <i class="resource-icon fas {{resources.madness.icon}}" aria-hidden="true"></i>
+                <div class="resource-bar">
+                    <span class="resource-bar-fill" style="width: {{resources.madness.fillPct}}; background: {{resources.madness.barColor}};"></span>
+                    <span class="resource-value">{{resources.madness.value}}/{{resources.madness.max}}</span>
+                </div>
+            </div>
             {{/if}}
         </div>
     </div>

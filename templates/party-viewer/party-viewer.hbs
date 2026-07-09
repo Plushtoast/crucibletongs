@@ -2,7 +2,7 @@
   <ul class="party-member-list">
     {{#each members}}
     <li class="party-member {{#if active}}active{{/if}} {{#if defeated}}defeated{{/if}}"
-        data-combatant-id="{{combatantId}}" data-action="activateCombatant" data-tooltip="{{name}}">
+        data-combatant-id="{{combatantId}}" data-action="activateCombatant">
       <div class="portrait-frame">
         <div class="portrait-image" style="background-image: url('{{img}}')"></div>
         {{#if canViewResources}}
@@ -41,6 +41,7 @@
         </div>
         {{/if}}
       </div>
+      <span class="party-member-name ellipsis" data-tooltip="{{name}}">{{name}}</span>
     </li>
     {{/each}}
   </ul>

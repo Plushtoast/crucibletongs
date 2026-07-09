@@ -363,9 +363,30 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         for (const [id, resource] of Object.entries(rs)) {
             const r = foundry.utils.mergeObject(SYSTEM.RESOURCES[id], resource, { inplace: false });
             r.id = id;
-            //r.pct = Math.round(r.value * 100 / r.max);
-            //r.cssPct = `--resource-pct: ${100 - r.pct}%`;
+            r.pct = r.max > 0 ? Math.round(r.value * 100 / r.max) : 0;
+            r.fillPct = `${r.pct}%`;
             resources[r.id] = r;
+        }
+
+        const poolPairs = [
+            { active: "health", reserve: "wounds", icon: "fa-heart", reserveIcon: "fa-heart-crack" },
+            { active: "morale", reserve: "madness", icon: "fa-brain", reserveIcon: "fa-head-side-virus" }
+        ];
+        for (const { active, reserve, icon, reserveIcon } of poolPairs) {
+            const activeRes = resources[active];
+            const colors = SYSTEM.RESOURCES[active].color;
+            const ratio = activeRes.max > 0 ? activeRes.value / activeRes.max : 0;
+            activeRes.icon = icon;
+            activeRes.barColor = colors.low.mix(colors.high, ratio).css;
+            activeRes.accentColor = colors.high.css;
+
+            const reserveRes = resources[reserve];
+            if (reserveRes?.value > 0) {
+                const reserveColors = SYSTEM.RESOURCES[reserve].color;
+                const reserveRatio = reserveRes.max > 0 ? reserveRes.value / reserveRes.max : 0;
+                reserveRes.icon = reserveIcon;
+                reserveRes.barColor = reserveColors.low.mix(reserveColors.high, reserveRatio).css;
+            }
         }
 
         resources.action = prepareActionPips(resources.action);

@@ -3,7 +3,7 @@
 # Crucible Tongs
 
 Crucible Tongs adds some minor functionality to the crucible system to enhance the experience for the current Ember Playtest.
-Among these is a Action HUD on the Token to quickly select combat actions as well as some additional tooltips for the Macro bar, a macro bar replacement and a initiative tracker.
+Among these is a Action HUD on the Token to quickly select combat actions as well as some additional tooltips for the Macro bar, a macro bar replacement, a initiative tracker, and a draggable party portrait HUD for combat.
 Be aware as Crucible is still under heavy development the functions might get oudated or replaced quickly.
 
 # Features
@@ -24,3 +24,7 @@ Be aware as Crucible is still under heavy development the functions might get ou
 * Light-weight combat tracker popout adopted to crucible
 
 <img alt="grafik" src="https://github.com/Plushtoast/crucibletongs/blob/foundry14/demo/combattracker.png?raw=true" />
+
+* Party viewer: a frameless, draggable portrait strip shown during combat for members of the primary party who are also combatants in the active encounter. Portraits show health and morale overlays, optional wounds and madness columns in the same style as the hotbar, and effect icons. Click a portrait to activate that combatant in the tracker; double-click behaves like the combat tracker. Drag the grip to reposition (position is saved per client). Right-click the grip to switch between horizontal and vertical layout; scroll the mouse wheel on the grip to resize portraits. Configure via the cog button or in **Crucible Tongs** module settings under the **Party Viewer** tab.
+
+* GM action confirmation toasts: when a Crucible action needs GM approval, a toast overlay appears in the lower third of the viewport showing the acting character, action name, and **Confirm** / **Dismiss** buttons. Up to five recent pending actions are shown as a stack (newest on top). **Dismiss** only hides the toast locally; the chat card stays unconfirmed.

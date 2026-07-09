@@ -59,6 +59,8 @@ export class CruciblePartyViewer extends foundry.applications.api.HandlebarsAppl
   static PORTRAIT_SIZE_MIN = 48;
   static PORTRAIT_SIZE_MAX = 120;
   static PORTRAIT_SIZE_STEP = 4;
+  static NAME_HEIGHT = 16;
+  static NAME_GAP = 2;
 
   setPosition(position) {
     const currentPosition = super.setPosition(position);
@@ -80,13 +82,15 @@ export class CruciblePartyViewer extends foundry.applications.api.HandlebarsAppl
     const count = Math.max(members.length, 1);
     const controlsWidth = 36;
     const gap = 4;
+    const { NAME_HEIGHT, NAME_GAP } = this.constructor;
+    const memberHeight = portraitSize + NAME_GAP + NAME_HEIGHT;
 
     if (vertical) {
       options.position.width = portraitSize + controlsWidth + 8;
-      options.position.height = portraitSize * count + gap * (count - 1) + 8;
+      options.position.height = memberHeight * count + gap * (count - 1) + 8;
     } else {
       options.position.width = portraitSize * count + gap * (count - 1) + controlsWidth + 8;
-      options.position.height = portraitSize + 8;
+      options.position.height = memberHeight + 8;
     }
 
     const savedPosition = game.settings.get("crucibletongs", "partyViewerPosition");
