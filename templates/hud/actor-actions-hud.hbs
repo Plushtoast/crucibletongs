@@ -67,10 +67,10 @@
         </div>
     </section>
     <section class="tab flexcol {{tabs.macro.cssClass}}" data-group="{{tabs.macro.group}}" data-tab="{{tabs.macro.id}}">
-        <div class="actions-bar" data-tooltip-direction="UP">
+        <div class="actions-bar macro-items" data-tooltip-direction="UP">
             {{#each slots as |slot|}}
             <div class="slot {{slot.cssClass}}" role="button" data-action="execute" data-slot="{{slot.slot}}"
-                style="{{slot.style}}" aria-label="{{slot.ariaLabel}}"
+                aria-label="{{slot.ariaLabel}}"
                 {{#if slot.tooltip}}data-tooltip-text="{{slot.tooltip}}"{{/if}}>
                 {{#if slot.img}}<img src="{{slot.img}}" alt="{{slot.ariaLabel}}">{{/if}}
                 <span class="key">{{slot.key}}</span>

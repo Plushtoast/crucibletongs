@@ -1,3 +1,4 @@
+import { HotBarHover } from "./hotbar.js";
 import { CrucibleTongsSettingsConfig } from "./settings-app.js";
 import {
     defenseTooltip,
@@ -19,12 +20,15 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     static ACTION_BAR_GAP = 4;
 
     #dropTarget;
+    #macroDragSlot;
+    #macroDropTarget;
 
     static DEFAULT_OPTIONS = {
         id: "actor-hud",
         actions: {
             action: this._onAction,
             configure: this._onConfigure,
+            execute: this._onExecuteMacro,
         },
         window: {
             frame: false,
@@ -72,6 +76,22 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         CrucibleTongsSettingsConfig.open();
     }
 
+    static async _onExecuteMacro(event, target) {
+        const slot = target.closest(".slot") ?? target;
+        const macro = this.#getMacroForSlot(slot);
+
+        if (macro) await macro.execute();
+        else {
+            const cls = foundry.utils.getDocumentClass("Macro");
+            const doc = new cls({
+                name: cls.defaultName({ type: "chat" }),
+                type: "chat",
+                scope: "global",
+            });
+            await doc.sheet.render({ force: true, hotbarSlot: slot.dataset.slot });
+        }
+    }
+
     #setActor() {
         const controlled = canvas?.tokens?.controlled || [];
         const fallbackActor = game.user.character ?? (!game.user.isGM
@@ -114,7 +134,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         context.defenseTooltip = this.#prepareDefenseTooltip();
         context.weapons = this.#weaponPositions();
         context.effects = this.#prepareEffects();
-        context.slots = ui.hotbar.slots;
+        context.slots = this.#prepareMacroSlots();
         context.actionSlots = this.#prepareActionBarSlots(Object.entries(context.actions).map(([key, action]) => ({
             type: "action",
             key,
@@ -155,6 +175,35 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             slots.push({ cssClass: "open", empty: true });
         }
         return slots;
+    }
+
+    #prepareMacroSlots() {
+        const slots = [];
+
+        for (let slot = 1; slot <= 50; slot++) {
+            const macroId = game.user.hotbar[slot];
+            const macro = macroId ? game.macros.get(macroId) : null;
+            const indexInPage = (slot - 1) % 10;
+            slots.push({
+                slot,
+                macro,
+                key: indexInPage < 9 ? indexInPage + 1 : 0,
+                img: macro?.img ?? null,
+                cssClass: macro ? "full" : "open",
+                tooltip: macro?.name ?? null,
+                ariaLabel: macro?.name ?? _loc("HOTBAR.Empty"),
+            });
+        }
+
+        return slots;
+    }
+
+    #getMacroForSlot(element) {
+        const slot = element?.dataset?.slot;
+        if (!slot) return null;
+        const macroId = game.user.hotbar[slot];
+        if (!macroId) return null;
+        return game.macros.get(macroId) ?? null;
     }
 
     #prepareDefenseTooltip() {
@@ -336,13 +385,26 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
 
         new foundry.applications.ux.DragDrop.implementation({
             dragSelector: "[data-type='action']",
-            dropSelector: '.slot',
+            dropSelector: ".action-items .slot",
             callbacks: {
                 dragstart: this.#onDragStart.bind(this),
                 dragover: this.#onDragOver.bind(this),
                 drop: this.#onDrop.bind(this)
             }
         }).bind(this.element);
+
+        new foundry.applications.ux.DragDrop.implementation({
+            dragSelector: ".macro-items .slot.full",
+            dropSelector: ".macro-items .slot",
+            callbacks: {
+                dragstart: this.#onMacroDragStart.bind(this),
+                dragend: this.#onMacroDragEnd.bind(this),
+                dragover: this.#onMacroDragOver.bind(this),
+                drop: this.#onMacroDrop.bind(this),
+            }
+        }).bind(this.element);
+
+        HotBarHover.bindEvents(this, this.element.querySelector(".macro-items"));
 
         ui.hotbar.element.hidden = !!this.actor;
     }
@@ -358,7 +420,8 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     }
 
     #onDragOver(event) {
-        const target = event.target.closest(".slot");
+        const target = event.target.closest(".action-items .slot");
+        if (!target) return;
         if (target === this.#dropTarget) return;
         if (this.#dropTarget) this.#dropTarget.classList.remove("drop-target");
         this.#dropTarget = target;
@@ -374,7 +437,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         const dragData = JSON.parse(event.dataTransfer.getData("text/plain"));
         if (!dragData || !("id" in dragData) || !("type" in dragData)) return;
 
-        const target = event.target.closest(".slot")?.dataset.actionId;
+        const target = event.target.closest(".action-items .slot")?.dataset.actionId;
         if (!target) return;
 
         const slots = this.element.querySelectorAll(".action-items .slot.full");
@@ -389,6 +452,59 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         slotArray[toIndex] = dragData.id;
 
         this.actor.setFlag("crucibletongs", "hotbarSlots", slotArray);
+    }
+
+    #onMacroDragStart(event) {
+        const slot = event.currentTarget.closest(".slot");
+        const macro = this.#getMacroForSlot(slot);
+        if (!macro || ui.hotbar.locked) {
+            event.preventDefault();
+            return;
+        }
+        this.#macroDragSlot = slot.dataset.slot;
+        const dragData = foundry.utils.mergeObject(macro.toDragData(), { slot: this.#macroDragSlot });
+        event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+    }
+
+    #onMacroDragEnd() {
+        this.#macroDragSlot = undefined;
+    }
+
+    #onMacroDragOver(event) {
+        const target = event.target.closest(".macro-items .slot");
+        if (target === this.#macroDropTarget) return;
+        if (this.#macroDropTarget) this.#macroDropTarget.classList.remove("drop-target");
+        this.#macroDropTarget = target;
+        if (!target || target.dataset.slot === this.#macroDragSlot) return;
+        target.classList.add("drop-target");
+    }
+
+    async #onMacroDrop(event) {
+        if (this.#macroDropTarget) {
+            this.#macroDropTarget.classList.remove("drop-target");
+            this.#macroDropTarget = undefined;
+        }
+
+        const slot = event.target.closest(".macro-items .slot");
+        const dropSlot = slot?.dataset.slot;
+        if (!dropSlot || this.#macroDragSlot === dropSlot) return;
+        this.#macroDragSlot = undefined;
+
+        const data = TextEditor.implementation.getDragEventData(event);
+        if (Hooks.call("hotbarDrop", ui.hotbar, data, dropSlot) === false) return;
+        if (ui.hotbar.locked) return;
+
+        const cls = foundry.utils.getDocumentClass(data.type);
+        const doc = await cls?.fromDropData(data);
+        if (!doc) return;
+
+        let macro;
+        if (data.type === "Macro") macro = game.macros.has(doc.id) ? doc : await cls.create(doc.toObject());
+        else if (data.type === "RollTable") macro = await ui.hotbar._createRollTableRollMacro(doc);
+        else macro = await ui.hotbar._createDocumentSheetToggle(doc);
+
+        if (!macro) return;
+        return game.user.assignHotbarMacro(macro, dropSlot, { fromSlot: data.slot });
     }
 
     static updateHotbar(actorId, force = false) {
@@ -420,6 +536,37 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             jQuery: false,
             fixed: true,
         });
+
+        new foundry.applications.ux.ContextMenu(this.element, ".macro-items .slot.full", [], {
+            onOpen: this.#onMacroContext.bind(this),
+            jQuery: false,
+            fixed: true,
+        });
+    }
+
+    #onMacroContext(target) {
+        const macro = this.#getMacroForSlot(target);
+        if (!macro) return;
+
+        ui.context.menuItems = [
+            {
+                label: "MACRO.Edit",
+                icon: "fa-solid fa-edit",
+                visible: macro.isOwner,
+                onClick: () => macro.sheet.render({ force: true, hotbarSlot: target.dataset.slot }),
+            },
+            {
+                label: "MACRO.Remove",
+                icon: "fa-solid fa-xmark",
+                onClick: () => game.user.assignHotbarMacro(null, Number(target.dataset.slot)),
+            },
+            {
+                label: "MACRO.Delete",
+                icon: "fa-solid fa-trash",
+                visible: macro.isOwner,
+                onClick: () => macro.deleteDialog(),
+            },
+        ];
     }
 
     #onSlotContext(target) {

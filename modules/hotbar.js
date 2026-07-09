@@ -1,6 +1,9 @@
 export class HotBarHover {
     static bindEvents(bar, html) {
-        const activemacros = html.querySelectorAll(".slot.full");
+        const root = html ?? bar?.element;
+        if (!root) return;
+
+        const activemacros = root.querySelectorAll(".slot.full");
         activemacros.forEach((macro) => {
             HotBarHover.buildDataset(macro);
             macro.addEventListener("pointerover", (ev) => this.onHoverMacros(ev));
@@ -12,14 +15,14 @@ export class HotBarHover {
         const slot = macro.dataset.slot;
         if (!slot) return;
 
-        const macroData = ui.hotbar.slots.find(x => x.slot == slot);
-        if (!macroData || !macroData.macro) return;
+        const macroId = game.user.hotbar[slot];
+        const macroDoc = macroId ? game.macros.get(macroId) : null;
+        if (!macroDoc) return;
 
-
-        const isMacroAction = /game\.system\.api\.documents\.CrucibleActor\.macroAction\(actor,/.test(macroData.macro.command);
+        const isMacroAction = /game\.system\.api\.documents\.CrucibleActor\.macroAction\(actor,/.test(macroDoc.command);
         if (!isMacroAction) return;
 
-        const skill = macroData.macro.command.match(/"(.*?)"/)[1].replace(/\\\"/g, "");
+        const skill = macroDoc.command.match(/"(.*?)"/)[1].replace(/\\\"/g, "");
 
         macro.dataset.crucibleTooltip = "action";
         macro.dataset.actionId = skill;

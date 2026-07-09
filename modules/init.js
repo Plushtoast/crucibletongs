@@ -10,8 +10,13 @@ import { tooltipWithKeybinding } from "./utility.js";
 
 Hooks.on("renderHotbar", (bar, html) => {
     HotBarHover.bindEvents(bar, html);
+    HotBarActor.updateHotbar(undefined, true);
 });
-;
+
+Hooks.on("updateUser", (user, changes) => {
+    if (user.id !== game.user.id || !("hotbar" in changes)) return;
+    HotBarActor.updateHotbar(undefined, true);
+});
 
 Hooks.on('renderTokenHUD', (app, jhtml, data) => {
     HotActions.bindToHud(app, jhtml, data);

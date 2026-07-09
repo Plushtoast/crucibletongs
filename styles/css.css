@@ -136,6 +136,9 @@
   overflow-x: hidden;
   transition: all 0.3s ease-in-out;
 }
+.crucibletongs-actor-hud .macro-items .slot.open {
+  cursor: var(--cursor-pointer);
+}
 .crucibletongs-actor-hud .tabs {
   justify-content: start;
   gap: 1px;
