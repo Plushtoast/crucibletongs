@@ -156,6 +156,23 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
             field = new fields.NumberField({ required: true, choices: setting.choices, initial: setting.default, min, max, step });
         } else if (setting.type === Object) {
             field = new fields.JSONField({ required: true, initial: setting.default });
+        } else if (setting.filePicker) {
+            const categories = {
+                audio: ["AUDIO"],
+                folder: [],
+                font: ["FONT"],
+                graphics: ["GRAPHICS"],
+                image: ["IMAGE"],
+                imagevideo: ["IMAGE", "VIDEO"],
+                text: ["TEXT"],
+                texture: ["TEXTURE"],
+                video: ["VIDEO"],
+            }[setting.filePicker] ?? Object.keys(CONST.FILE_CATEGORIES).filter(c => c !== "HTML");
+            if (categories.length) {
+                field = new fields.FilePathField({ required: true, blank: true, categories });
+            } else {
+                field = new fields.StringField({ required: true });
+            }
         } else {
             field = new fields.StringField({ required: true, choices: setting.choices, initial: setting.default });
         }

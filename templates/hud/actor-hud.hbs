@@ -16,7 +16,9 @@
         </div>
     </div>
     <div class="avatar-container flexrow">
-        <img class="avatar flex0 {{ifThen myTurn 'myRound' ''}}" src="{{actor.img}}"{{#if defenseTooltip}} data-tooltip-class="crucible crucible-tooltip" data-tooltip-html="{{defenseTooltip}}"{{/if}} />
+        <div class="avatar-portrait flex0 {{ifThen myTurn 'myRound' ''}}">
+            <img class="avatar" src="{{actor.img}}"{{#if defenseTooltip}} data-tooltip-class="crucible crucible-tooltip" data-tooltip-html="{{defenseTooltip}}"{{/if}} />
+        </div>
         {{#each weapons}}
         <div data-action="weapon" data-id="{{weapon.id}}" class="weapon" style="{{{style}}}">
             {{#if weapon.img}}
