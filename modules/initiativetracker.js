@@ -1,4 +1,4 @@
-import { canViewCombatantActions, defenseTooltip, prepareActiveCombatantResources } from "./utility.js";
+import { canViewCombatantActions, canViewCombatantDefenseTooltip, defenseTooltip, prepareActiveCombatantResources } from "./utility.js";
 
 const { mergeObject, duplicate } = foundry.utils;
 
@@ -115,12 +115,16 @@ export class CrucibleCombatTracker extends foundry.applications.api.HandlebarsAp
                 }
 
                 if (started && !(skipDefeated && combatant.defeated) && (game.user.isGM || !combatant.hidden)) {
-                    if (turn.isOwner && combatant.actor) {
+                    const canViewActorStats = canViewCombatantDefenseTooltip(combatant);
+                    turn.canViewActorStats = canViewActorStats;
+                    if (canViewActorStats) {
                         turn.maxLP = combatant.actor.resources.health.max;
                         turn.currentLP = combatant.actor.resources.health.value;
                         turn.maxM = combatant.actor.resources.morale.max;
                         turn.currentM = combatant.actor.resources.morale.value;
                         turn.defenseTooltip = this.#prepareDefenseTooltip(combatant);
+                    } else {
+                        delete turn.defenseTooltip;
                     }
                     filteredTurns.push(turn);
                 }

@@ -1,9 +1,53 @@
 const SKILL_TOOLTIP_TEMPLATE = "modules/crucibletongs/templates/tooltip/skill.hbs";
 
+/**
+ * Format the first active keybinding for a registered action.
+ * @param {string} actionId
+ * @param {string} [namespace="crucibletongs"]
+ * @returns {string}
+ */
+export function getKeybindingDisplay(actionId, namespace = "crucibletongs") {
+  if (!actionId || !game.keybindings?.actions?.has(`${namespace}.${actionId}`)) return "";
+
+  try {
+    const bindings = game.keybindings.get(namespace, actionId);
+    const binding = bindings?.find((b) => b?.key);
+    if (!binding) return "";
+    return foundry.applications.sidebar.apps.ControlsConfig.humanizeBinding(binding);
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Build a localized tooltip label with an optional keybinding suffix.
+ * @param {string} labelKey
+ * @param {string} actionId
+ * @param {string} [namespace="crucibletongs"]
+ * @returns {string}
+ */
+export function tooltipWithKeybinding(labelKey, actionId, namespace = "crucibletongs") {
+  const label = _loc(labelKey);
+  const keyString = getKeybindingDisplay(actionId, namespace);
+  return keyString ? `${label} (${keyString})` : label;
+}
+
+/**
+ * Whether the current user may view an actor's defense stats on the initiative tracker.
+ * @param {Combatant} combatant
+ * @returns {boolean}
+ */
+export function canViewCombatantDefenseTooltip(combatant) {
+  if (!combatant?.actor) return false;
+  if (game.user.isGM) return true;
+  if (combatant.players?.includes(game.user)) return true;
+  return combatant.actor.isOwner;
+}
+
 export function defenseTooltip(combatant) {
   const actor = combatant?.actor;
   const token = combatant?.token;
-  if (!actor) return "";
+  if (!actor || !canViewCombatantDefenseTooltip(combatant)) return "";
 
   const title = token?.name ?? actor.name ?? "";
   const lines = [`<h4>${title}</h4>`].concat(

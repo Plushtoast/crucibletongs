@@ -158,7 +158,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     }
 
     #prepareDefenseTooltip() {
-        return defenseTooltip({actor: this.actor, token: this.token});
+        return defenseTooltip(this.token?.combatant ?? { actor: this.actor, token: this.token });
     }
 
     #prepareActions() {

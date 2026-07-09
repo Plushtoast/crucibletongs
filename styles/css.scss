@@ -417,25 +417,6 @@
         }
     }
 
-    .tongs-indicator,
-    .tongs-indicator i:before {
-        text-align: center;
-        text-shadow:
-            -1px -1px 0 var(--color-frame),
-            1px -1px 0 var(--color-frame),
-            -1px 1px 0 var(--color-frame),
-            1px 1px 0 var(--color-frame);
-    }
-
-    .quickbuttons {
-        align-items: center;
-        justify-content: center;
-        margin-top: -10px;
-        position: relative;
-        z-index: 1;
-    }
-
-
     .weapon {
         width: 44px;
         height: 44px;

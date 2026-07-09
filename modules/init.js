@@ -4,6 +4,7 @@ import "./settings.js";
 import { HotBarActor } from "./hotbaractor.js";
 import { CrucibleCombatTracker } from "./initiativetracker.js";
 import initKeybindings from "./keybindings.js";
+import { tooltipWithKeybinding } from "./utility.js";
 
 Hooks.on("renderHotbar", (bar, html) => {
     HotBarHover.bindEvents(bar, html);
@@ -124,7 +125,11 @@ Hooks.on('renderCombatTracker', (app, html, data, what) => {
 Hooks.once('init', () => {
     game.modules.get("crucibletongs").api = {
         combatTracker: new CrucibleCombatTracker()
-    }
+    };
+
+    Handlebars.registerHelper({
+        tooltipWithKeybinding: (labelKey, actionId) => tooltipWithKeybinding(labelKey, actionId),
+    });
 });
 
 Hooks.once('setup', () => {

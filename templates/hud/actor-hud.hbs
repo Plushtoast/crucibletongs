@@ -1,4 +1,4 @@
-<div class="flex0">
+<div class="flex0 actor-part" data-tooltip-direction="UP">
     <div class="flexrow resources">
         <div class="flex0 resource-pair {{#unless resources.wounds.value}}single-resource{{/unless}}" data-tooltip-html="{{resources.health.label}} {{resources.health.value}}/{{resources.health.max}}{{#if resources.wounds.value}}<br>{{resources.wounds.label}} {{resources.wounds.value}}/{{resources.wounds.max}}{{/if}}"
             style="--resource-accent: {{resources.health.color.high}};">
@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="avatar-container flexrow">
-        <img class="avatar flex0 {{ifThen myTurn 'myRound' ''}}" src="{{actor.img}}" />
+        <img class="avatar flex0 {{ifThen myTurn 'myRound' ''}}" src="{{actor.img}}"{{#if defenseTooltip}} data-tooltip-class="crucible crucible-tooltip" data-tooltip-html="{{defenseTooltip}}"{{/if}} />
         {{#each weapons}}
         <div data-action="weapon" data-id="{{weapon.id}}" class="weapon" style="{{{style}}}">
             {{#if weapon.img}}
@@ -26,9 +26,6 @@
             {{/if}}
         </div>
         {{/each}}
-    </div>
-    <div class="flexrow quickbuttons" data-tooltip-direction="RIGHT">
-        <div class="flex0 tongs-indicator" data-tooltip-class="crucible crucible-tooltip" data-tooltip-html="{{defenseTooltip}}"><i class="fas fa-shield"></i></div>
     </div>
     {{#if inCombat}}
     <div class="pips flexrow"
