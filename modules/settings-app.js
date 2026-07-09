@@ -104,6 +104,7 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
         ],
         gm: [
             "enableActionConfirmToast",
+            "enableImagePopout",
         ],
     };
 

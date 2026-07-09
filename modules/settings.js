@@ -1,4 +1,5 @@
 import { syncPartyViewer } from "./party-viewer.js";
+import { refreshImagePopoutControls } from "./image-popout.js";
 
 Hooks.once('init', () => {
     const settings = {
@@ -172,6 +173,17 @@ Hooks.once('init', () => {
                 if (!queue) return;
                 if (enabled) queue.bootstrap();
                 else queue.clear();
+            },
+        },
+        enableImagePopout: {
+            name: 'crucibletongs.SETTINGS.enableImagePopout',
+            hint: 'crucibletongs.SETTINGS.enableImagePopoutHint',
+            scope: 'client',
+            config: true,
+            default: true,
+            type: Boolean,
+            onChange: async () => {
+                refreshImagePopoutControls();
             },
         },
         enablePartyViewer: {

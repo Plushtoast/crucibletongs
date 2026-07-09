@@ -26,6 +26,8 @@
             "showIniTrackerActionPipsHint": "Pokazuje punkty akcji, skupienia i heroizmu aktywnego uczestnika walki pod przyciskami sterowania turą w śledzeniu walki.",
             "enableActionConfirmToast": "Pokaż powiadomienia o potwierdzeniu akcji",
             "enableActionConfirmToastHint": "Wyświetla nakładkę toast dla oczekujących potwierdzeń akcji wymagających zgody MG.",
+            "enableImagePopout": "Pokaż wyskakujące okno obrazu na kartach",
+            "enableImagePopoutHint": "Pokazuje przycisk po najechaniu na portret na kartach aktora i przedmiotu, który otwiera okno podglądu i umożliwia udostępnienie obrazu graczom.",
             "enablePartyViewer": "Pokaż widok drużyny",
             "enablePartyViewerHint": "Pokazuje podczas walki przeciągalny HUD portretów członków drużyny biorących udział w starciu.",
             "partyViewerLayout": "Układ widoku drużyny",
@@ -68,6 +70,11 @@
             "Confirm": "Potwierdź",
             "Dismiss": "Ukryj",
             "Drag": "Przeciągnij, aby zmienić położenie"
+        },
+        "IMAGE_POPOUT": {
+            "Show": "Pokaż portret",
+            "ShareToPlayers": "Pokaż graczom",
+            "ShareDialogTitle": "Pokaż {name} graczom"
         },
         "HOTBAR": {
             "ACTION": {

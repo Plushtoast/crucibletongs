@@ -26,6 +26,8 @@
             "showIniTrackerActionPipsHint": "Show the active combatant's action, focus, and heroism points below the turn controls in the combat tracker.",
             "enableActionConfirmToast": "Show Action Confirmation Toasts",
             "enableActionConfirmToastHint": "Show a toast overlay for pending action confirmations that require GM approval.",
+            "enableImagePopout": "Show Sheet Image Popout",
+            "enableImagePopoutHint": "Show a hover button on actor and item sheet portraits that opens a popout and allows sharing the image with players.",
             "enablePartyViewer": "Show Party Viewer",
             "enablePartyViewerHint": "Show a draggable party portrait HUD during combat for primary-party combatants.",
             "partyViewerLayout": "Party Viewer Layout",
@@ -68,6 +70,11 @@
             "Confirm": "Confirm",
             "Dismiss": "Dismiss",
             "Drag": "Drag to reposition"
+        },
+        "IMAGE_POPOUT": {
+            "Show": "Show Portrait",
+            "ShareToPlayers": "Show to Players",
+            "ShareDialogTitle": "Show {name} to Players"
         },
         "HOTBAR": {
             "ACTION": {

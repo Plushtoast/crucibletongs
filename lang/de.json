@@ -26,6 +26,8 @@
             "showIniTrackerActionPipsHint": "Zeigt die Aktions-, Fokus- und Heldenpunkte des aktiven Kampfteilnehmers unter den Zugsteuerungen im Kampftracker an.",
             "enableActionConfirmToast": "Aktionsbestätigungs-Toasts anzeigen",
             "enableActionConfirmToastHint": "Zeigt ein Toast-Overlay für ausstehende Aktionsbestätigungen, die SL-Freigabe erfordern.",
+            "enableImagePopout": "Bild-Popout auf Bögen anzeigen",
+            "enableImagePopoutHint": "Zeigt auf Akteur- und Gegenstandsbögen einen Hover-Button auf dem Porträt, der ein Popout öffnet und das Teilen des Bildes mit Spielern erlaubt.",
             "enablePartyViewer": "Gruppenanzeige anzeigen",
             "enablePartyViewerHint": "Zeigt während des Kampfes ein verschiebbares Gruppenportrait-HUD für Gruppenmitglieder im Kampf.",
             "partyViewerLayout": "Gruppenanzeige Layout",
@@ -68,6 +70,11 @@
             "Confirm": "Bestätigen",
             "Dismiss": "Ausblenden",
             "Drag": "Ziehen zum Verschieben"
+        },
+        "IMAGE_POPOUT": {
+            "Show": "Porträt anzeigen",
+            "ShareToPlayers": "Spielern zeigen",
+            "ShareDialogTitle": "{name} Spielern zeigen"
         },
         "HOTBAR": {
             "ACTION": {

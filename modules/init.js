@@ -7,6 +7,7 @@ import { actionConfirmQueue, ActionConfirmQueue } from "./action-confirm-toast.j
 import { CruciblePartyViewer, syncPartyViewer } from "./party-viewer.js";
 import initKeybindings from "./keybindings.js";
 import { tooltipWithKeybinding } from "./utility.js";
+import { initImagePopout } from "./image-popout.js";
 
 Hooks.on("renderHotbar", (bar, html) => {
     HotBarHover.bindEvents(bar, html);
@@ -29,7 +30,8 @@ Hooks.on("canvasPan", () => {
 Hooks.once('ready', () => {
     foundry.applications.handlebars.loadTemplates([
         "modules/crucibletongs/templates/tooltip/activeeffect.hbs",
-        "modules/crucibletongs/templates/tooltip/skill.hbs"
+        "modules/crucibletongs/templates/tooltip/skill.hbs",
+        "modules/crucibletongs/templates/image-popout/share-dialog.hbs",
     ]);
     actionConfirmQueue.bootstrap();
 });
@@ -184,4 +186,5 @@ Hooks.on("deleteChatMessage", (doc) => {
 
 Hooks.once('setup', () => {
     initKeybindings();
+    initImagePopout();
 });
