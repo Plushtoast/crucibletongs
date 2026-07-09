@@ -35,6 +35,13 @@ Hooks.once('init', () => {
             default: {},
             type: Object,
         },
+        actionConfirmToastPosition: {
+            name: 'actionConfirmToastPosition',
+            scope: 'client',
+            config: false,
+            default: {},
+            type: Object,
+        },
         enableCombatPan: {
             name: 'crucibletongs.SETTINGS.enableCombatPan',
             hint: 'crucibletongs.SETTINGS.enableCombatPanHint',
@@ -132,6 +139,20 @@ Hooks.once('init', () => {
             onChange: async () => {
                 const instance = foundry.applications.instances.get("actor-hud");
                 if (instance) instance.render(true, { focus: false });
+            },
+        },
+        enableActionConfirmToast: {
+            name: 'crucibletongs.SETTINGS.enableActionConfirmToast',
+            hint: 'crucibletongs.SETTINGS.enableActionConfirmToastHint',
+            scope: 'client',
+            config: true,
+            default: true,
+            type: Boolean,
+            onChange: async (enabled) => {
+                const queue = game.modules.get("crucibletongs")?.api?.actionConfirmQueue;
+                if (!queue) return;
+                if (enabled) queue.bootstrap();
+                else queue.clear();
             },
         },
     };

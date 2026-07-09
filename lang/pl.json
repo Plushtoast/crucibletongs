@@ -22,6 +22,8 @@
             "enableCombatPanHint": "Przesuń widok na bieżącą turę i wybierz token, jeśli dostępne są odpowiednie uprawnienia.",
             "showIniTrackerActionPips": "Pokaż punkty akcji w śledzeniu walki",
             "showIniTrackerActionPipsHint": "Pokazuje punkty akcji, skupienia i heroizmu aktywnego uczestnika walki pod przyciskami sterowania turą w śledzeniu walki.",
+            "enableActionConfirmToast": "Pokaż powiadomienia o potwierdzeniu akcji",
+            "enableActionConfirmToastHint": "Wyświetla nakładkę toast dla oczekujących potwierdzeń akcji wymagających zgody MG.",
             "CONFIG": {
                 "Title": "Konfiguracja Crucible Tongs",
                 "Saved": "Ustawienia Crucible Tongs zostały zapisane.",
@@ -38,6 +40,11 @@
         },
         "combatTracker": "Śledzenie walki",
         "waitInit": "Opóźnienie",
+        "ACTION_CONFIRM": {
+            "Confirm": "Potwierdź",
+            "Dismiss": "Ukryj",
+            "Drag": "Przeciągnij, aby zmienić położenie"
+        },
         "HOTBAR": {
             "ACTION": {
                 "Use": "Użyj {name}"

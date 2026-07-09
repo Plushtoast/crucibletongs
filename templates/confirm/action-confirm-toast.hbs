@@ -1,0 +1,24 @@
+<div class="action-confirm-panel">
+    <section class="dragHandler" data-tooltip="{{localize 'crucibletongs.ACTION_CONFIRM.Drag'}}">
+        <i class="fas fa-grip-vertical"></i>
+    </section>
+    <div class="action-confirm-list">
+        {{#each items}}
+        <div class="action-confirm-row" data-message-id="{{messageId}}">
+            <img class="actor-portrait" src="{{actorImg}}" alt="{{actorName}}">
+            <span class="actor-name">{{actorName}}</span>
+            <span class="action-name">{{actionName}}</span>
+            <button type="button" class="frame-brown confirm-btn" data-action="confirm"
+                data-tooltip="{{localize 'crucibletongs.ACTION_CONFIRM.Confirm'}}"
+                aria-label="{{localize 'crucibletongs.ACTION_CONFIRM.Confirm'}}">
+                <i class="fa-solid fa-hexagon-check"></i>{{localize "crucibletongs.ACTION_CONFIRM.Confirm"}}
+            </button>
+            <button type="button" class="frame-brown dismiss-btn icon-only" data-action="dismiss"
+                data-tooltip="{{localize 'crucibletongs.ACTION_CONFIRM.Dismiss'}}"
+                aria-label="{{localize 'crucibletongs.ACTION_CONFIRM.Dismiss'}}">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        {{/each}}
+    </div>
+</div>

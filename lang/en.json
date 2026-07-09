@@ -22,6 +22,8 @@
             "enableCombatPanHint": "Pan the view to the current turn and select the token if ownership rights are available.",
             "showIniTrackerActionPips": "Show Action Points in Combat Tracker",
             "showIniTrackerActionPipsHint": "Show the active combatant's action, focus, and heroism points below the turn controls in the combat tracker.",
+            "enableActionConfirmToast": "Show Action Confirmation Toasts",
+            "enableActionConfirmToastHint": "Show a toast overlay for pending action confirmations that require GM approval.",
             "CONFIG": {
                 "Title": "Crucible Tongs Configuration",
                 "Saved": "Crucible Tongs settings saved.",
@@ -38,6 +40,11 @@
         },
         "combatTracker": "Combat Tracker",
         "waitInit": "Delay",
+        "ACTION_CONFIRM": {
+            "Confirm": "Confirm",
+            "Dismiss": "Dismiss",
+            "Drag": "Drag to reposition"
+        },
         "HOTBAR": {
             "ACTION": {
                 "Use": "Use {name}"

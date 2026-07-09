@@ -22,6 +22,8 @@
             "enableCombatPanHint": "Schwenke die Sicht auf den aktuellen Zug und selektiere den Token sofern Besitzerrechte vorhanden.",
             "showIniTrackerActionPips": "Aktionspunkte im Kampftracker anzeigen",
             "showIniTrackerActionPipsHint": "Zeigt die Aktions-, Fokus- und Heldenpunkte des aktiven Kampfteilnehmers unter den Zugsteuerungen im Kampftracker an.",
+            "enableActionConfirmToast": "Aktionsbestätigungs-Toasts anzeigen",
+            "enableActionConfirmToastHint": "Zeigt ein Toast-Overlay für ausstehende Aktionsbestätigungen, die SL-Freigabe erfordern.",
             "CONFIG": {
                 "Title": "Crucible Tongs Konfiguration",
                 "Saved": "Crucible Tongs Einstellungen gespeichert.",
@@ -38,6 +40,11 @@
         },
         "combatTracker": "Kampftracker",
         "waitInit": "Verzögern",
+        "ACTION_CONFIRM": {
+            "Confirm": "Bestätigen",
+            "Dismiss": "Ausblenden",
+            "Drag": "Ziehen zum Verschieben"
+        },
         "HOTBAR": {
             "ACTION": {
                 "Use": "{name} verwenden"
