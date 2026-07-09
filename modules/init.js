@@ -3,6 +3,7 @@ import { HotActions } from "./hotactions.js";
 import "./settings.js";
 import { HotBarActor } from "./hotbaractor.js";
 import { CrucibleCombatTracker } from "./initiativetracker.js";
+import initKeybindings from "./keybindings.js";
 
 Hooks.on("renderHotbar", (bar, html) => {
     HotBarHover.bindEvents(bar, html);
@@ -124,4 +125,8 @@ Hooks.once('init', () => {
     game.modules.get("crucibletongs").api = {
         combatTracker: new CrucibleCombatTracker()
     }
+});
+
+Hooks.once('setup', () => {
+    initKeybindings();
 });
