@@ -4,6 +4,7 @@ import "./settings.js";
 import { HotBarActor } from "./hotbaractor.js";
 import { CrucibleCombatTracker } from "./initiativetracker.js";
 import { actionConfirmQueue, ActionConfirmQueue } from "./action-confirm-toast.js";
+import { CruciblePartyViewer, syncPartyViewer } from "./party-viewer.js";
 import initKeybindings from "./keybindings.js";
 import { tooltipWithKeybinding } from "./utility.js";
 
@@ -86,10 +87,12 @@ Hooks.on('createActiveEffect', (effect, options) => {
 
 Hooks.on('deleteCombat', () => {
     HotBarActor.updateHotbar(undefined, true);
+    syncPartyViewer();
 });
 
 Hooks.on('updateCombat', (combat, changed, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
+    syncPartyViewer();
 });
 
 Hooks.on('updateActor', (actor, updates) => {
@@ -104,6 +107,7 @@ Hooks.on('updateActor', (actor, updates) => {
 
 Hooks.on('createCombat', (combat, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
+    syncPartyViewer();
 });
 
 Hooks.on('canvasInit', () => {
@@ -114,19 +118,43 @@ Hooks.on('canvasInit', () => {
 
 
 Hooks.on('renderCombatTracker', (app, html, data, what) => {
-    if (!game.settings.get('crucibletongs', 'enableCombatFlow')) return;
-
-    const combatTracker = game.modules.get("crucibletongs").api.combatTracker;
-    if (game.combat) {
-        combatTracker.updateTracker(data);
-    } else {
-        combatTracker.close();
+    if (game.settings.get('crucibletongs', 'enableCombatFlow')) {
+        const combatTracker = game.modules.get("crucibletongs").api.combatTracker;
+        if (game.combat) {
+            combatTracker.updateTracker(data);
+        } else {
+            combatTracker.close();
+        }
     }
+
+    syncPartyViewer();
+});
+
+function shouldSyncPartyViewerActor(actor) {
+    return crucible.party?.system?.actors?.has(actor);
+}
+
+Hooks.on('updateActor', (actor, updates) => {
+    if (!game.combat || !shouldSyncPartyViewerActor(actor)) return;
+    syncPartyViewer();
+});
+
+Hooks.on('updateActiveEffect', (effect) => {
+    if (effect.parent && shouldSyncPartyViewerActor(effect.parent)) syncPartyViewer();
+});
+
+Hooks.on('createActiveEffect', (effect) => {
+    if (effect.parent && shouldSyncPartyViewerActor(effect.parent)) syncPartyViewer();
+});
+
+Hooks.on('deleteActiveEffect', (effect) => {
+    if (effect.parent && shouldSyncPartyViewerActor(effect.parent)) syncPartyViewer();
 });
 
 Hooks.once('init', () => {
     game.modules.get("crucibletongs").api = {
         combatTracker: new CrucibleCombatTracker(),
+        partyViewer: new CruciblePartyViewer(),
         actionConfirmQueue,
     };
 

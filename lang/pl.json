@@ -24,12 +24,30 @@
             "showIniTrackerActionPipsHint": "Pokazuje punkty akcji, skupienia i heroizmu aktywnego uczestnika walki pod przyciskami sterowania turą w śledzeniu walki.",
             "enableActionConfirmToast": "Pokaż powiadomienia o potwierdzeniu akcji",
             "enableActionConfirmToastHint": "Wyświetla nakładkę toast dla oczekujących potwierdzeń akcji wymagających zgody MG.",
+            "enablePartyViewer": "Pokaż widok drużyny",
+            "enablePartyViewerHint": "Pokazuje podczas walki przeciągalny HUD portretów członków drużyny biorących udział w starciu.",
+            "partyViewerLayout": "Układ widoku drużyny",
+            "partyViewerLayoutHint": "Układa portrety drużyny poziomo lub pionowo. Kliknij prawym przyciskiem uchwyt, aby przełączyć.",
+            "partyViewerLayoutHorizontal": "Poziomy",
+            "partyViewerLayoutVertical": "Pionowy",
+            "partyViewerSize": "Rozmiar portretu widoku drużyny",
+            "partyViewerSizeHint": "Długość krawędzi każdej ramki portretu drużyny w pikselach.",
             "CONFIG": {
                 "Title": "Konfiguracja Crucible Tongs",
                 "Saved": "Ustawienia Crucible Tongs zostały zapisane.",
                 "Hint": "Akcje na pasku skrótów aktora można sortować metodą przeciągnij i upuść.",
+                "HotbarHint": "Konfiguruj HUD aktora nad paskiem makr.",
+                "CombatHint": "Konfiguruj nakładkę śledzenia inicjatywy.",
+                "PartyViewerHint": "Konfiguruj HUD portretów drużyny podczas walki.",
+                "GmHint": "Konfiguruj narzędzia i nakładki MG.",
                 "ResetDefaults": "Przywróć domyślne",
                 "DefaultsRestored": "Ustawienia Crucible Tongs zostały przywrócone do wartości domyślnych."
+            },
+            "TABS": {
+                "hotbar": "Pasek aktora",
+                "combat": "Śledzenie walki",
+                "partyViewer": "Widok drużyny",
+                "gm": "Mistrz gry"
             }
         },
         "TABS": {
@@ -40,6 +58,10 @@
         },
         "combatTracker": "Śledzenie walki",
         "waitInit": "Opóźnienie",
+        "partyViewer": {
+            "title": "Widok drużyny",
+            "dragHint": "Przeciągnij, aby zmienić położenie. Kliknij prawym przyciskiem, aby zmienić układ. Kółko myszy zmienia rozmiar portretów."
+        },
         "ACTION_CONFIRM": {
             "Confirm": "Potwierdź",
             "Dismiss": "Ukryj",

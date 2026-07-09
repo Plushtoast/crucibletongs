@@ -465,6 +465,28 @@
 }
 
 .crucibletongs-settings-config {
+    .crucibletongs-settings-body {
+        gap: 8px;
+    }
+
+    .tabs {
+        border-bottom: 1px solid var(--color-border-light-tertiary);
+        margin-bottom: 4px;
+
+        a {
+            padding: 6px 10px;
+            font-size: var(--font-size-13);
+        }
+    }
+
+    .tab {
+        gap: 8px;
+
+        &:not(.active) {
+            display: none;
+        }
+    }
+
     .crucibletongs-settings-list {
         display: flex;
         flex-direction: column;
@@ -859,5 +881,170 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+.crucible-party-viewer {
+    position: absolute;
+    padding: 0;
+    background: transparent;
+
+    .window-content {
+        background: transparent;
+    }
+
+    .window-header {
+        display: none;
+    }
+
+    .dragHandler {
+        flex: 0 0 14px;
+        min-width: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #cfbea2;
+        background: none;
+        border: none;
+        line-height: var(--portraitSize, 72px);
+
+        &:hover {
+            color: #f4e6d7;
+        }
+    }
+
+    .party-viewer-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 0 0 auto;
+    }
+
+    .party-viewer-config {
+        flex: 0 0 18px;
+        width: 18px;
+        min-width: 18px;
+        height: 18px;
+        line-height: 18px;
+        padding: 0;
+        font-size: 11px;
+    }
+
+    .party-viewer-root {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 4px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .party-member-list {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .layout-0 .party-member-list {
+        flex-direction: column;
+    }
+
+    .party-member {
+        cursor: pointer;
+        flex: 0 0 auto;
+
+        &.active .portrait-frame {
+            border-color: #f4e6d7;
+            box-shadow: 0 0 8px rgba(244, 230, 215, 0.7), inset 0 0 6px rgba(244, 230, 215, 0.35);
+        }
+
+        &.defeated .portrait-frame {
+            opacity: 0.45;
+            filter: grayscale(0.8);
+        }
+    }
+
+    .portrait-frame {
+        position: relative;
+        width: var(--portraitSize);
+        height: var(--portraitSize);
+        border: 2px solid #5a453b;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .portrait-image {
+        position: absolute;
+        inset: 0;
+        background-color: var(--color-frame-bg-50, rgb(28 26 26 / 50%));
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .resource-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .resource-group {
+        flex: 0 0 50%;
+        display: flex;
+        height: 100%;
+        min-width: 0;
+    }
+
+    .resource-column {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: auto;
+    }
+
+    .resource-fill {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: calc(100% * var(--fill, 0));
+        opacity: 0.5;
+        background-image: var(--resource-fill-image), var(--resource-gradient);
+        background-size: 100% 100%, 100% 100%;
+        background-position: center bottom, center bottom;
+        background-repeat: no-repeat;
+        pointer-events: none;
+    }
+
+    .token-effects {
+        position: absolute;
+        right: 2px;
+        bottom: 2px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 1px;
+        max-width: calc(100% - 4px);
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .token-effect {
+        width: 16px;
+        height: 16px;
+        border: none;
+        border-radius: 2px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
     }
 }

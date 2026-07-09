@@ -1,14 +1,59 @@
-<div class="crucibletongs-settings-list scrollable">
-    {{#if hint}}
-    <p class="hint">{{localize hint}}</p>
-    {{/if}}
+<div class="crucibletongs-settings-body flexcol">
     <div class="form-group">
         <button type="button" data-action="resetDefaults">
             <i class="fa-solid fa-undo" inert></i>
             <span>{{localize "crucibletongs.SETTINGS.CONFIG.ResetDefaults"}}</span>
         </button>
     </div>
-    {{#each settings as |setting|}}
-    {{formGroup setting.field value=setting.value input=setting.input localize=true}}
-    {{/each}}
+
+    <nav class="sheet-tabs tabs" aria-role="Form Tab Navigation">
+        <a class="{{tabs.hotbar.cssClass}}" data-action="tab" data-group="config" data-tab="hotbar">
+            {{localize tabs.hotbar.label}}
+        </a>
+        <a class="{{tabs.combat.cssClass}}" data-action="tab" data-group="config" data-tab="combat">
+            {{localize tabs.combat.label}}
+        </a>
+        <a class="{{tabs.partyViewer.cssClass}}" data-action="tab" data-group="config" data-tab="partyViewer">
+            {{localize tabs.partyViewer.label}}
+        </a>
+        <a class="{{tabs.gm.cssClass}}" data-action="tab" data-group="config" data-tab="gm">
+            {{localize tabs.gm.label}}
+        </a>
+    </nav>
+
+    <section class="tab flexcol {{tabs.hotbar.cssClass}}" data-group="config" data-tab="hotbar">
+        <p class="hint">{{localize "crucibletongs.SETTINGS.CONFIG.HotbarHint"}}</p>
+        <div class="crucibletongs-settings-list scrollable">
+            {{#each settingsByTab.hotbar as |setting|}}
+            {{formGroup setting.field value=setting.value input=setting.input localize=true}}
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="tab flexcol {{tabs.combat.cssClass}}" data-group="config" data-tab="combat">
+        <p class="hint">{{localize "crucibletongs.SETTINGS.CONFIG.CombatHint"}}</p>
+        <div class="crucibletongs-settings-list scrollable">
+            {{#each settingsByTab.combat as |setting|}}
+            {{formGroup setting.field value=setting.value input=setting.input localize=true}}
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="tab flexcol {{tabs.partyViewer.cssClass}}" data-group="config" data-tab="partyViewer">
+        <p class="hint">{{localize "crucibletongs.SETTINGS.CONFIG.PartyViewerHint"}}</p>
+        <div class="crucibletongs-settings-list scrollable">
+            {{#each settingsByTab.partyViewer as |setting|}}
+            {{formGroup setting.field value=setting.value input=setting.input localize=true}}
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="tab flexcol {{tabs.gm.cssClass}}" data-group="config" data-tab="gm">
+        <p class="hint">{{localize "crucibletongs.SETTINGS.CONFIG.GmHint"}}</p>
+        <div class="crucibletongs-settings-list scrollable">
+            {{#each settingsByTab.gm as |setting|}}
+            {{formGroup setting.field value=setting.value input=setting.input localize=true}}
+            {{/each}}
+        </div>
+    </section>
 </div>

@@ -24,12 +24,30 @@
             "showIniTrackerActionPipsHint": "Show the active combatant's action, focus, and heroism points below the turn controls in the combat tracker.",
             "enableActionConfirmToast": "Show Action Confirmation Toasts",
             "enableActionConfirmToastHint": "Show a toast overlay for pending action confirmations that require GM approval.",
+            "enablePartyViewer": "Show Party Viewer",
+            "enablePartyViewerHint": "Show a draggable party portrait HUD during combat for primary-party combatants.",
+            "partyViewerLayout": "Party Viewer Layout",
+            "partyViewerLayoutHint": "Arrange party portraits horizontally or vertically. Right-click the drag grip to cycle.",
+            "partyViewerLayoutHorizontal": "Horizontal",
+            "partyViewerLayoutVertical": "Vertical",
+            "partyViewerSize": "Party Viewer Portrait Size",
+            "partyViewerSizeHint": "Edge length of each party portrait frame in pixels.",
             "CONFIG": {
                 "Title": "Crucible Tongs Configuration",
                 "Saved": "Crucible Tongs settings saved.",
                 "Hint": "Actions on the actor hotbar can be reordered with drag and drop.",
+                "HotbarHint": "Configure the actor hotbar HUD shown above the macro bar.",
+                "CombatHint": "Configure the initiative combat tracker overlay.",
+                "PartyViewerHint": "Configure the party portrait HUD shown during combat.",
+                "GmHint": "Configure game master tools and overlays.",
                 "ResetDefaults": "Reset Defaults",
                 "DefaultsRestored": "Crucible Tongs settings reset to defaults."
+            },
+            "TABS": {
+                "hotbar": "Actor Hotbar",
+                "combat": "Combat Tracker",
+                "partyViewer": "Party Viewer",
+                "gm": "Game Master"
             }
         },
         "TABS": {
@@ -40,6 +58,10 @@
         },
         "combatTracker": "Combat Tracker",
         "waitInit": "Delay",
+        "partyViewer": {
+            "title": "Party Viewer",
+            "dragHint": "Drag to reposition. Right-click to change layout. Scroll wheel to resize portraits."
+        },
         "ACTION_CONFIRM": {
             "Confirm": "Confirm",
             "Dismiss": "Dismiss",

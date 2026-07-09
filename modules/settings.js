@@ -1,3 +1,5 @@
+import { syncPartyViewer } from "./party-viewer.js";
+
 Hooks.once('init', () => {
     const settings = {
         enableHotBarActor: {
@@ -153,6 +155,58 @@ Hooks.once('init', () => {
                 if (!queue) return;
                 if (enabled) queue.bootstrap();
                 else queue.clear();
+            },
+        },
+        enablePartyViewer: {
+            name: 'crucibletongs.SETTINGS.enablePartyViewer',
+            hint: 'crucibletongs.SETTINGS.enablePartyViewerHint',
+            scope: 'client',
+            config: true,
+            default: true,
+            type: Boolean,
+            onChange: async (enabled) => {
+                const viewer = game.modules.get("crucibletongs")?.api?.partyViewer;
+                if (!viewer) return;
+                if (enabled) await syncPartyViewer();
+                else viewer.close();
+            },
+        },
+        partyViewerPosition: {
+            name: 'partyViewerPosition',
+            scope: 'client',
+            config: false,
+            default: {},
+            type: Object,
+        },
+        partyViewerLayout: {
+            name: 'crucibletongs.SETTINGS.partyViewerLayout',
+            hint: 'crucibletongs.SETTINGS.partyViewerLayoutHint',
+            scope: 'client',
+            config: true,
+            default: 0,
+            type: Number,
+            choices: {
+                0: 'crucibletongs.SETTINGS.partyViewerLayoutVertical',
+                1: 'crucibletongs.SETTINGS.partyViewerLayoutHorizontal',
+            },
+            onChange: async () => {
+                await syncPartyViewer();
+            },
+        },
+        partyViewerSize: {
+            name: 'crucibletongs.SETTINGS.partyViewerSize',
+            hint: 'crucibletongs.SETTINGS.partyViewerSizeHint',
+            scope: 'client',
+            config: true,
+            default: 72,
+            type: Number,
+            range: {
+                min: 48,
+                max: 120,
+                step: 4,
+            },
+            onChange: async () => {
+                await syncPartyViewer();
             },
         },
     };

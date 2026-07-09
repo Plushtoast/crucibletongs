@@ -1,0 +1,56 @@
+<div class="party-viewer-root layout-{{layout}}" style="--portraitSize: {{portraitSize}}px">
+  <ul class="party-member-list">
+    {{#each members}}
+    <li class="party-member {{#if active}}active{{/if}} {{#if defeated}}defeated{{/if}}"
+        data-combatant-id="{{combatantId}}" data-action="activateCombatant" data-tooltip="{{name}}">
+      <div class="portrait-frame">
+        <div class="portrait-image" style="background-image: url('{{img}}')"></div>
+        {{#if canViewResources}}
+        <div class="resource-overlay">
+          <div class="resource-group health-group">
+            <div class="resource-column health"
+              data-tooltip="{{localize 'RESOURCES.Health'}} {{health.value}}/{{health.max}}">
+              <div class="resource-fill" style="--fill: {{health.fill}}; --resource-gradient: {{health.gradient}}; --resource-fill-image: url('{{health.fillUrl}}')"></div>
+            </div>
+            {{#if wounds}}
+            <div class="resource-column wounds reserve"
+              data-tooltip="{{localize 'RESOURCES.Wounds'}} {{wounds.value}}/{{wounds.max}}">
+              <div class="resource-fill" style="--fill: {{wounds.fill}}; --resource-gradient: {{wounds.gradient}}; --resource-fill-image: url('{{wounds.fillUrl}}')"></div>
+            </div>
+            {{/if}}
+          </div>
+          <div class="resource-group morale-group">
+            <div class="resource-column morale"
+              data-tooltip="{{localize 'RESOURCES.Morale'}} {{morale.value}}/{{morale.max}}">
+              <div class="resource-fill" style="--fill: {{morale.fill}}; --resource-gradient: {{morale.gradient}}; --resource-fill-image: url('{{morale.fillUrl}}')"></div>
+            </div>
+            {{#if madness}}
+            <div class="resource-column madness reserve"
+              data-tooltip="{{localize 'RESOURCES.Madness'}} {{madness.value}}/{{madness.max}}">
+              <div class="resource-fill" style="--fill: {{madness.fill}}; --resource-gradient: {{madness.gradient}}; --resource-fill-image: url('{{madness.fillUrl}}')"></div>
+            </div>
+            {{/if}}
+          </div>
+        </div>
+        {{/if}}
+        {{#if effects.hasIcons}}
+        <div class="token-effects" data-tooltip="{{effects.tooltip}}">
+          {{#each effects.icons}}
+          <img class="token-effect" src="{{img}}" alt="{{name}}">
+          {{/each}}
+        </div>
+        {{/if}}
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+  <div class="party-viewer-controls">
+    <button type="button" class="party-viewer-config frame-brown inline-control icon fa-solid fa-cog"
+      data-action="configure"
+      data-tooltip="crucibletongs.SETTINGS.CONFIG.Title"
+      aria-label="{{localize 'crucibletongs.SETTINGS.CONFIG.Title'}}"></button>
+    <section class="dragHandler" data-tooltip="crucibletongs.partyViewer.dragHint">
+      <i class="fas fa-grip-vertical"></i>
+    </section>
+  </div>
+</div>

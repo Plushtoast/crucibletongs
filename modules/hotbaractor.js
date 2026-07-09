@@ -69,7 +69,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
     }
 
     static _onConfigure() {
-        new CrucibleTongsSettingsConfig().render(true, { focus: true });
+        CrucibleTongsSettingsConfig.open();
     }
 
     #setActor() {

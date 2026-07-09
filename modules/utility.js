@@ -252,3 +252,129 @@ export async function toggleActionFavorite(actor, actionId) {
   else favorites.add(action.id);
   await actor.update({ "system.favorites": favorites });
 }
+
+/**
+ * Whether the current user may view an actor's resource pools on the party viewer.
+ * @param {Actor} actor
+ * @returns {boolean}
+ */
+export function canViewActorResources(actor) {
+  if (!actor) return false;
+  return game.user.isGM
+    || actor.isOwner
+    || actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER);
+}
+
+/**
+ * Prepare effect icon data for an actor, matching core combat tracker rules.
+ * @param {Actor} actor
+ * @returns {{icons: object[], tooltip: string, hasIcons: boolean}}
+ */
+export function prepareActorEffectIcons(actor) {
+  const icons = [];
+  const SHOW_ICON = CONST.ACTIVE_EFFECT_SHOW_ICON;
+  const defeatedStatus = CONFIG.specialStatusEffects.DEFEATED;
+
+  for (const effect of actor?.appliedEffects ?? []) {
+    if (effect.statuses.has(defeatedStatus)) continue;
+    if ((effect.showIcon === SHOW_ICON.ALWAYS)
+      || ((effect.showIcon === SHOW_ICON.CONDITIONAL) && effect.isTemporary)) {
+      icons.push({ img: effect.img, name: effect.name });
+    }
+  }
+
+  const tooltip = ui.combat?._formatEffectsTooltip?.(icons) ?? "";
+  return { icons, tooltip, hasIcons: icons.length > 0 };
+}
+
+/**
+ * Prepare a damage overlay column (health/morale — grows with lost points).
+ * @param {object} resource
+ * @param {"health"|"morale"} resourceId
+ * @returns {object}
+ */
+function prepareDamageOverlay(resource, resourceId) {
+  const colors = SYSTEM.RESOURCES[resourceId].color;
+  const fillImages = { health: "health-fill.png", morale: "morale-fill.png" };
+  return {
+    value: resource.value,
+    max: resource.max,
+    fill: resource.max ? (resource.max - resource.value) / resource.max : 0,
+    gradient: `linear-gradient(to top, ${colors.low.css}, ${colors.high.css})`,
+    fillUrl: `systems/crucible/ui/resources/${fillImages[resourceId]}`,
+  };
+}
+
+/**
+ * Prepare a reserve overlay column (wounds/madness — grows with accumulated points).
+ * @param {object} resource
+ * @param {"wounds"|"madness"} resourceId
+ * @returns {object}
+ */
+function prepareReserveOverlay(resource, resourceId) {
+  const colors = SYSTEM.RESOURCES[resourceId].color;
+  const fillImages = { wounds: "health-fill.png", madness: "morale-fill.png" };
+  return {
+    value: resource.value,
+    max: resource.max,
+    fill: resource.max ? resource.value / resource.max : 0,
+    gradient: `linear-gradient(to top, ${colors.low.css}, ${colors.high.css})`,
+    fillUrl: `systems/crucible/ui/resources/${fillImages[resourceId]}`,
+  };
+}
+
+/**
+ * Prepare party viewer member entries for primary-party combatants in the active encounter.
+ * @returns {Promise<object[]>}
+ */
+export async function preparePartyViewerMembers() {
+  const party = crucible.party;
+  if (!party || !game.combat) return [];
+
+  const partyActorIds = new Set([...party.system.actors].map((a) => a.id));
+  const skipDefeated = game.settings.get("core", Combat.CONFIG_SETTING).skipDefeated;
+  const members = [];
+
+  for (const combatant of game.combat.combatants) {
+    const actor = combatant.actor;
+    if (!actor || !partyActorIds.has(actor.id)) continue;
+    if (!game.user.isGM && combatant.hidden) continue;
+    if (skipDefeated && combatant.defeated) continue;
+
+    const img = ui.combat?._getCombatantThumbnail
+      ? await ui.combat._getCombatantThumbnail(combatant)
+      : (combatant.token?.texture?.src ?? actor.img);
+
+    const entry = {
+      id: actor.id,
+      combatantId: combatant.id,
+      name: combatant.token?.name ?? actor.name,
+      img,
+      active: combatant.id === game.combat.combatant?.id,
+      defeated: combatant.defeated,
+      canViewResources: canViewActorResources(actor),
+    };
+
+    if (entry.canViewResources) {
+      const health = actor.resources.health;
+      const morale = actor.resources.morale;
+      const wounds = actor.resources.wounds;
+      const madness = actor.resources.madness;
+      entry.health = prepareDamageOverlay(health, "health");
+      entry.morale = prepareDamageOverlay(morale, "morale");
+      if (wounds?.value > 0 && wounds.max > 0) {
+        entry.wounds = prepareReserveOverlay(wounds, "wounds");
+      }
+      if (madness?.value > 0 && madness.max > 0) {
+        entry.madness = prepareReserveOverlay(madness, "madness");
+      }
+    }
+
+    entry.effects = prepareActorEffectIcons(actor);
+    members.push(entry);
+  }
+
+  const sortMap = new Map(party.system.members.map((m, i) => [m.actorId, i]));
+  members.sort((a, b) => (sortMap.get(a.id) ?? 99) - (sortMap.get(b.id) ?? 99));
+  return members;
+}

@@ -24,12 +24,30 @@
             "showIniTrackerActionPipsHint": "Zeigt die Aktions-, Fokus- und Heldenpunkte des aktiven Kampfteilnehmers unter den Zugsteuerungen im Kampftracker an.",
             "enableActionConfirmToast": "Aktionsbestätigungs-Toasts anzeigen",
             "enableActionConfirmToastHint": "Zeigt ein Toast-Overlay für ausstehende Aktionsbestätigungen, die SL-Freigabe erfordern.",
+            "enablePartyViewer": "Gruppenanzeige anzeigen",
+            "enablePartyViewerHint": "Zeigt während des Kampfes ein verschiebbares Gruppenportrait-HUD für Gruppenmitglieder im Kampf.",
+            "partyViewerLayout": "Gruppenanzeige Layout",
+            "partyViewerLayoutHint": "Ordnet Gruppenportraits horizontal oder vertikal an. Rechtsklick auf den Griff wechselt das Layout.",
+            "partyViewerLayoutHorizontal": "Horizontal",
+            "partyViewerLayoutVertical": "Vertikal",
+            "partyViewerSize": "Gruppenanzeige Porträtgröße",
+            "partyViewerSizeHint": "Kantenlänge jedes Gruppenporträts in Pixeln.",
             "CONFIG": {
                 "Title": "Crucible Tongs Konfiguration",
                 "Saved": "Crucible Tongs Einstellungen gespeichert.",
                 "Hint": "Aktionen in der Actor-Hotbar können per Drag and Drop neu sortiert werden.",
+                "HotbarHint": "Konfiguriere das Actor-Hotbar-HUD über der Makroleiste.",
+                "CombatHint": "Konfiguriere das Initiativ-Kampftracker-Overlay.",
+                "PartyViewerHint": "Konfiguriere das Gruppenportrait-HUD während des Kampfes.",
+                "GmHint": "Konfiguriere Spielleiter-Werkzeuge und Overlays.",
                 "ResetDefaults": "Standards wiederherstellen",
                 "DefaultsRestored": "Crucible Tongs Einstellungen wurden auf Standardwerte zurückgesetzt."
+            },
+            "TABS": {
+                "hotbar": "Actor-Hotbar",
+                "combat": "Kampftracker",
+                "partyViewer": "Gruppenanzeige",
+                "gm": "Spielleiter"
             }
         },
         "TABS": {
@@ -40,6 +58,10 @@
         },
         "combatTracker": "Kampftracker",
         "waitInit": "Verzögern",
+        "partyViewer": {
+            "title": "Gruppenanzeige",
+            "dragHint": "Ziehen zum Verschieben. Rechtsklick wechselt das Layout. Mausrad ändert die Porträtgröße."
+        },
         "ACTION_CONFIRM": {
             "Confirm": "Bestätigen",
             "Dismiss": "Ausblenden",
