@@ -56,6 +56,7 @@
   --hover-color: #c41e3a;
   --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
   --hotbarActorScale: 1;
+  --hotbarHorizontalOffset: 0px;
   --hotbarActionBarWidth: 268px;
   --hotbarActionBarSlotSize: 40px;
   --hotbarActionBarGap: 4px;
@@ -64,6 +65,7 @@
   --hotbarActionBarHeight: calc(var(--hotbarActionBarSlotSize) * var(--hotbarActionBarRows) + var(--hotbarActionBarGap) * (var(--hotbarActionBarRows) - 1));
   pointer-events: all;
   margin-bottom: 10px;
+  margin-left: var(--hotbarHorizontalOffset);
   transition: all 0.3s ease-in-out;
   transform-origin: left bottom;
   transform: scale(var(--hotbarActorScale));

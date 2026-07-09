@@ -18,6 +18,8 @@
             "hotbarActionBarColumnsHint": "Number of action icons shown per row. Applies to actions, talents, favorites, and macros.",
             "hotbarActionBarRows": "Hotbar Action Bar Rows",
             "hotbarActionBarRowsHint": "Fixed number of rows shown in the action bar. Icons scroll vertically when there are more than fit.",
+            "hotbarHorizontalOffset": "Hotbar Horizontal Offset",
+            "hotbarHorizontalOffsetHint": "Shifts the actor hotbar HUD left or right in pixels.",
             "enableCombatPan": "Pan to Current Turn",
             "enableCombatPanHint": "Pan the view to the current turn and select the token if ownership rights are available.",
             "showIniTrackerActionPips": "Show Action Points in Combat Tracker",

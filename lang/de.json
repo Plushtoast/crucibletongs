@@ -18,6 +18,8 @@
             "hotbarActionBarColumnsHint": "Anzahl der Aktions-Icons pro Zeile. Gilt für Aktionen, Talente, Favoriten und Makros.",
             "hotbarActionBarRows": "Hotbar Aktionsleiste Zeilen",
             "hotbarActionBarRowsHint": "Feste Anzahl an Zeilen in der Aktionsleiste. Bei mehr Icons als Platz ist, wird vertikal gescrollt.",
+            "hotbarHorizontalOffset": "Hotbar Horizontaler Versatz",
+            "hotbarHorizontalOffsetHint": "Verschiebt das Actor-Hotbar-HUD nach links oder rechts in Pixeln.",
             "enableCombatPan": "Schwenke zu aktuellem Zug",
             "enableCombatPanHint": "Schwenke die Sicht auf den aktuellen Zug und selektiere den Token sofern Besitzerrechte vorhanden.",
             "showIniTrackerActionPips": "Aktionspunkte im Kampftracker anzeigen",

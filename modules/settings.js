@@ -143,6 +143,23 @@ Hooks.once('init', () => {
                 if (instance) instance.render(true, { focus: false });
             },
         },
+        hotbarHorizontalOffset: {
+            name: 'crucibletongs.SETTINGS.hotbarHorizontalOffset',
+            hint: 'crucibletongs.SETTINGS.hotbarHorizontalOffsetHint',
+            scope: 'client',
+            config: true,
+            default: 0,
+            type: Number,
+            range: {
+                min: -500,
+                max: 500,
+                step: 5,
+            },
+            onChange: async () => {
+                const instance = foundry.applications.instances.get("actor-hud");
+                if (instance) instance.render(true, { focus: false });
+            },
+        },
         enableActionConfirmToast: {
             name: 'crucibletongs.SETTINGS.enableActionConfirmToast',
             hint: 'crucibletongs.SETTINGS.enableActionConfirmToastHint',

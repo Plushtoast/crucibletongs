@@ -18,6 +18,8 @@
             "hotbarActionBarColumnsHint": "Liczba ikon akcji w jednym wierszu. Dotyczy akcji, talentów, ulubionych i makr.",
             "hotbarActionBarRows": "Liczba wierszy paska akcji",
             "hotbarActionBarRowsHint": "Stała liczba wierszy na pasku akcji. Gdy ikon jest więcej niż mieści się w tym obszarze, pojawia się przewijanie pionowe.",
+            "hotbarHorizontalOffset": "Poziome przesunięcie paska skrótów",
+            "hotbarHorizontalOffsetHint": "Przesuwa HUD aktora na pasku skrótów w lewo lub w prawo w pikselach.",
             "enableCombatPan": "Przejdź do bieżącej tury",
             "enableCombatPanHint": "Przesuń widok na bieżącą turę i wybierz token, jeśli dostępne są odpowiednie uprawnienia.",
             "showIniTrackerActionPips": "Pokaż punkty akcji w śledzeniu walki",

@@ -88,6 +88,7 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
             "hotbarActorScale",
             "hotbarActionBarColumns",
             "hotbarActionBarRows",
+            "hotbarHorizontalOffset",
         ],
         combat: [
             "enableCombatFlow",

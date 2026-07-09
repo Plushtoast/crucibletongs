@@ -378,8 +378,10 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
         await super._onRender(context, options);
 
         const scale = game.settings.get("crucibletongs", "hotbarActorScale") ?? 1;
+        const horizontalOffset = game.settings.get("crucibletongs", "hotbarHorizontalOffset") ?? 0;
         const { columns, rows } = this.#getActionBarLayout();
         this.element.style.setProperty("--hotbarActorScale", scale);
+        this.element.style.setProperty("--hotbarHorizontalOffset", `${horizontalOffset}px`);
         this.element.style.setProperty("--hotbarActionBarWidth", `${HotBarActor.getActionBarWidth(columns)}px`);
         this.element.style.setProperty("--hotbarActionBarRows", rows);
 
