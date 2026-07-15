@@ -71,7 +71,7 @@ export class HotActions extends foundry.applications.api.HandlebarsApplicationMi
                 this.actor.useAction(actionId);
                 break;
             case 'skill':
-                this.actor.rollSkill(actionId, {dialog: true});
+                this.actor.rollSkill(actionId, { dialog: true, chatMessage: true });
                 break;
         }
         this.close({ animate: false });

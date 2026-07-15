@@ -199,7 +199,7 @@ export async function handleSkillContextAction(actor, skillId) {
     return check.dialog({ request: true, requestedActors });
   }
 
-  return actor.rollSkill(skillId, { dialog: true, messageMode: "blind" });
+  return actor.rollSkill(skillId, { dialog: true, messageMode: "blind", chatMessage: true });
 }
 
 /**

@@ -73,6 +73,30 @@ export class ActionConfirmQueue {
         return flags?.action && !flags?.confirmed;
     }
 
+    static isActiveCombat() {
+        return !!game.combat?.started;
+    }
+
+    static isCurrentCombatMessage(message) {
+        if (!ActionConfirmQueue.isActiveCombat()) return false;
+
+        const flags = message.flags?.crucible;
+        const actor = fromUuidSync(flags?.actor);
+        if (!actor) return false;
+
+        const combat = game.combat;
+        if (!combat.getCombatantsByActor(actor)?.length) return false;
+
+        const combatCreated = combat._stats?.createdTime;
+        if (combatCreated && message.timestamp < combatCreated) return false;
+
+        return true;
+    }
+
+    static isRelevantMessage(message) {
+        return ActionConfirmQueue.isPendingAction(message) && ActionConfirmQueue.isCurrentCombatMessage(message);
+    }
+
     static itemFromMessage(message) {
         const flags = message.flags.crucible;
         const actor = fromUuidSync(flags.actor);
@@ -86,7 +110,7 @@ export class ActionConfirmQueue {
 
     enqueue(message) {
         if (!ActionConfirmQueue.isEnabled()) return;
-        if (!ActionConfirmQueue.isPendingAction(message)) return;
+        if (!ActionConfirmQueue.isRelevantMessage(message)) return;
         if (this.#dismissed.has(message.id)) return;
 
         this.#queue = this.#queue.filter((item) => item.messageId !== message.id);
@@ -106,14 +130,23 @@ export class ActionConfirmQueue {
         this.dequeue(messageId);
     }
 
+    prune() {
+        this.#syncView();
+    }
+
     bootstrap() {
         if (!ActionConfirmQueue.isEnabled()) {
             this.clear();
             return;
         }
 
+        if (!ActionConfirmQueue.isActiveCombat()) {
+            this.clear();
+            return;
+        }
+
         this.#queue = game.messages.contents
-            .filter((message) => ActionConfirmQueue.isPendingAction(message) && !this.#dismissed.has(message.id))
+            .filter((message) => ActionConfirmQueue.isRelevantMessage(message) && !this.#dismissed.has(message.id))
             .slice(-MAX_ITEMS)
             .reverse()
             .map((message) => ActionConfirmQueue.itemFromMessage(message));
@@ -127,9 +160,17 @@ export class ActionConfirmQueue {
 
     #syncView() {
         if (!this.#toast) return;
+
+        const before = this.#queue.length;
+        this.#queue = this.#queue.filter((item) => {
+            const message = game.messages.get(item.messageId);
+            return message && ActionConfirmQueue.isRelevantMessage(message);
+        });
+        const pruned = this.#queue.length !== before;
+
         if (this.#queue.length) {
             this.#toast.render(true, { focus: false });
-        } else if (this.#toast.rendered) {
+        } else if (this.#toast.rendered || pruned) {
             this.#toast.close({ animate: false });
         }
     }
@@ -210,17 +251,30 @@ export class ActionConfirmToast extends foundry.applications.api.HandlebarsAppli
         const row = target.closest("[data-message-id]");
         const messageId = row?.dataset.messageId;
         const message = game.messages.get(messageId);
-        if (!message) return;
+        if (!message || !ActionConfirmQueue.isRelevantMessage(message)) {
+            if (messageId) this.queue.dequeue(messageId);
+            return;
+        }
 
         const button = target.closest("button") ?? target;
         const icon = button.querySelector("i");
         button.disabled = true;
         if (icon) icon.className = "fa-solid fa-spinner fa-spin";
 
-        await confirmActionMessage(message);
+        try {
+            await confirmActionMessage(message);
+        } catch (error) {
+            console.warn("Crucible Tongs | Dropping stale action confirmation toast entry.", error);
+            this.queue.dequeue(messageId);
+            return;
+        }
 
         const updated = game.messages.get(messageId);
         if (!updated?.flags?.crucible?.confirmed) {
+            if (!ActionConfirmQueue.isRelevantMessage(updated ?? message)) {
+                this.queue.dequeue(messageId);
+                return;
+            }
             button.disabled = false;
             if (icon) icon.className = "fa-solid fa-hexagon-check";
         }

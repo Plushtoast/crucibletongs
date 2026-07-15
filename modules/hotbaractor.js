@@ -74,7 +74,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
                 this.actor.useAction(actionId);
                 break;
             case 'skill':
-                this.actor.rollSkill(actionId, { dialog: true });
+                this.actor.rollSkill(actionId, { dialog: true, chatMessage: true });
                 break;
         }
     }
@@ -647,7 +647,7 @@ export class HotBarActor extends foundry.applications.api.HandlebarsApplicationM
             {
                 label: _loc("ACTOR.ACTIONS.RollCheck"),
                 icon: "fa-solid fa-dice",
-                onClick: () => this.actor.rollSkill(skillId, { dialog: true }),
+                onClick: () => this.actor.rollSkill(skillId, { dialog: true, chatMessage: true }),
             },
             alternateRoll,
             {

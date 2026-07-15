@@ -95,11 +95,26 @@ Hooks.on('createActiveEffect', (effect, options) => {
 Hooks.on('deleteCombat', () => {
     HotBarActor.updateHotbar(undefined, true);
     syncPartyViewer();
+    actionConfirmQueue.clear();
 });
 
 Hooks.on('updateCombat', (combat, changed, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
     syncPartyViewer();
+    if ('started' in changed) {
+        if (combat.started) actionConfirmQueue.bootstrap();
+        else actionConfirmQueue.clear();
+    } else if ('combatants' in changed) {
+        actionConfirmQueue.prune();
+    }
+});
+
+Hooks.on('deleteCombatant', () => {
+    actionConfirmQueue.prune();
+});
+
+Hooks.on('deleteActor', () => {
+    actionConfirmQueue.prune();
 });
 
 Hooks.on('updateActor', (actor, updates) => {
