@@ -301,7 +301,7 @@ function prepareDamageOverlay(resource, resourceId) {
     max: resource.max,
     fill: resource.max ? (resource.max - resource.value) / resource.max : 0,
     gradient: `linear-gradient(to top, ${colors.low.css}, ${colors.high.css})`,
-    fillUrl: `systems/crucible/ui/resources/${fillImages[resourceId]}`,
+    fillUrl: `/systems/crucible/ui/resources/${fillImages[resourceId]}`,
   };
 }
 
@@ -319,7 +319,7 @@ function prepareReserveOverlay(resource, resourceId) {
     max: resource.max,
     fill: resource.max ? resource.value / resource.max : 0,
     gradient: `linear-gradient(to top, ${colors.low.css}, ${colors.high.css})`,
-    fillUrl: `systems/crucible/ui/resources/${fillImages[resourceId]}`,
+    fillUrl: `/systems/crucible/ui/resources/${fillImages[resourceId]}`,
   };
 }
 
