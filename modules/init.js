@@ -8,6 +8,7 @@ import { CruciblePartyViewer, syncPartyViewer } from "./party-viewer.js";
 import initKeybindings from "./keybindings.js";
 import { tooltipWithKeybinding } from "./utility.js";
 import { initImagePopout } from "./image-popout.js";
+import { AppSettings, EmberCalendar } from "./app-settings.js";
 
 Hooks.on("renderHotbar", (bar, html) => {
     HotBarHover.bindEvents(bar, html);
@@ -96,14 +97,20 @@ Hooks.on('deleteCombat', () => {
     HotBarActor.updateHotbar(undefined, true);
     syncPartyViewer();
     actionConfirmQueue.clear();
+    game.modules.get("crucibletongs")?.api?.combatTracker?.onCombatEnded();
 });
 
 Hooks.on('updateCombat', (combat, changed, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
     syncPartyViewer();
     if ('started' in changed) {
-        if (combat.started) actionConfirmQueue.bootstrap();
-        else actionConfirmQueue.clear();
+        if (combat.started) {
+            actionConfirmQueue.bootstrap();
+            game.modules.get("crucibletongs")?.api?.combatTracker?.dockForNewCombat();
+        } else {
+            actionConfirmQueue.clear();
+            game.modules.get("crucibletongs")?.api?.combatTracker?.onCombatEnded();
+        }
     } else if ('combatants' in changed) {
         actionConfirmQueue.prune();
     }
@@ -118,7 +125,7 @@ Hooks.on('deleteActor', () => {
 });
 
 Hooks.on('updateActor', (actor, updates) => {
-    if (!game.settings.get('crucibletongs', 'enableCombatFlow') || !game.settings.get('crucibletongs', 'showIniTrackerActionPips')) return;
+    if (!AppSettings.get("combatTracker").enabled || !AppSettings.get("combatTracker").showActionPips) return;
     if (!game.combat?.started) return;
     const combatTracker = game.modules.get("crucibletongs").api.combatTracker;
     if (!combatTracker.combatData) return;
@@ -130,6 +137,7 @@ Hooks.on('updateActor', (actor, updates) => {
 Hooks.on('createCombat', (combat, options, userId) => {
     HotBarActor.updateHotbar(undefined, true);
     syncPartyViewer();
+    game.modules.get("crucibletongs")?.api?.combatTracker?.dockForNewCombat();
 });
 
 Hooks.on('canvasInit', () => {
@@ -140,7 +148,7 @@ Hooks.on('canvasInit', () => {
 
 
 Hooks.on('renderCombatTracker', (app, html, data, what) => {
-    if (game.settings.get('crucibletongs', 'enableCombatFlow')) {
+    if (AppSettings.get("combatTracker").enabled) {
         const combatTracker = game.modules.get("crucibletongs").api.combatTracker;
         if (game.combat) {
             combatTracker.updateTracker(data);
@@ -200,6 +208,7 @@ Hooks.on("deleteChatMessage", (doc) => {
 });
 
 Hooks.once('setup', () => {
+    EmberCalendar.init();
     initKeybindings();
     initImagePopout();
 });

@@ -1,4 +1,6 @@
-const { BooleanField } = foundry.data.fields;
+import { AppSettings, APP_SETTINGS_DEFAULTS } from "./app-settings.js";
+
+const { BooleanField, NumberField } = foundry.data.fields;
 
 /**
  * Boolean settings render the checkbox as a direct child of .form-group so long labels wrap correctly.
@@ -90,13 +92,6 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
             "hotbarActionBarRows",
             "hotbarHorizontalOffset",
         ],
-        combat: [
-            "enableCombatFlow",
-            "enableCombatPan",
-            "showIniTrackerActionPips",
-            "iniTrackerSize",
-            "iniTrackerCount",
-        ],
         partyViewer: [
             "enablePartyViewer",
             "partyViewerLayout",
@@ -108,6 +103,17 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
         ],
     };
 
+    static COMBAT_FIELD_KEYS = [
+        "enabled",
+        "dockToCalendar",
+        "fadedUi",
+        "preferTokenImage",
+        "panToTurn",
+        "showActionPips",
+        "size",
+        "count",
+    ];
+
     static PARTS = {
         settings: {
             template: "modules/crucibletongs/templates/settings/settings-config.hbs",
@@ -115,7 +121,12 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
     };
 
     static open({ tab } = {}) {
-        new CrucibleTongsSettingsConfig().render(true, { focus: true, tab });
+        const existing = foundry.applications.instances.get(this.DEFAULT_OPTIONS.id);
+        if (existing) {
+            existing.render(true, { focus: true, tab });
+            return existing;
+        }
+        return new this().render(true, { focus: true, tab });
     }
 
     async _prepareContext(options) {
@@ -127,8 +138,81 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
                 .map((key) => settingsByKey.get(`crucibletongs.${key}`))
                 .filter(Boolean);
         }
-        context.tabIds = Object.keys(this.constructor.SETTING_KEYS);
+        context.settingsByTab.combat = this.#prepareCombatSettings();
+        context.tabIds = [...Object.keys(this.constructor.SETTING_KEYS), "combat"];
         return context;
+    }
+
+    #prepareCombatSettings() {
+        const values = AppSettings.get("combatTracker");
+        const fields = this.#buildCombatFields();
+        return this.constructor.COMBAT_FIELD_KEYS.map((key) => ({
+            id: `appSettings.combatTracker.${key}`,
+            field: fields[key],
+            value: values[key],
+        }));
+    }
+
+    #buildCombatFields() {
+        const defaults = APP_SETTINGS_DEFAULTS.combatTracker;
+        const fields = {
+            enabled: new SettingsBooleanField({
+                initial: defaults.enabled,
+                label: "crucibletongs.SETTINGS.enableCombatFlow",
+                hint: "crucibletongs.SETTINGS.enableCombatFlowHint",
+            }),
+            dockToCalendar: new SettingsBooleanField({
+                initial: defaults.dockToCalendar,
+                label: "crucibletongs.SETTINGS.combatTracker.dockToCalendar",
+                hint: "crucibletongs.SETTINGS.combatTracker.dockToCalendarHint",
+            }),
+            fadedUi: new SettingsBooleanField({
+                initial: defaults.fadedUi,
+                label: "crucibletongs.SETTINGS.combatTracker.fadedUi",
+                hint: "crucibletongs.SETTINGS.combatTracker.fadedUiHint",
+            }),
+            preferTokenImage: new SettingsBooleanField({
+                initial: defaults.preferTokenImage,
+                label: "crucibletongs.SETTINGS.combatTracker.preferTokenImage",
+                hint: "crucibletongs.SETTINGS.combatTracker.preferTokenImageHint",
+            }),
+            panToTurn: new SettingsBooleanField({
+                initial: defaults.panToTurn,
+                label: "crucibletongs.SETTINGS.enableCombatPan",
+                hint: "crucibletongs.SETTINGS.enableCombatPanHint",
+            }),
+            showActionPips: new SettingsBooleanField({
+                initial: defaults.showActionPips,
+                label: "crucibletongs.SETTINGS.showIniTrackerActionPips",
+                hint: "crucibletongs.SETTINGS.showIniTrackerActionPipsHint",
+            }),
+            size: new NumberField({
+                required: true,
+                integer: true,
+                min: 30,
+                max: 140,
+                step: 5,
+                initial: defaults.size,
+                label: "crucibletongs.SETTINGS.iniTrackerSize",
+                hint: "crucibletongs.SETTINGS.iniTrackerSizeHint",
+            }),
+            count: new NumberField({
+                required: true,
+                integer: true,
+                min: 3,
+                max: 25,
+                step: 1,
+                initial: defaults.count,
+                label: "crucibletongs.SETTINGS.iniTrackerCount",
+                hint: "crucibletongs.SETTINGS.iniTrackerCountHint",
+            }),
+        };
+        for (const [key, field] of Object.entries(fields)) {
+            field.name = `appSettings.combatTracker.${key}`;
+            field.label = game.i18n.localize(field.label ?? "");
+            field.hint = game.i18n.localize(field.hint ?? "");
+        }
+        return fields;
     }
 
     #prepareSettingsMap() {
@@ -185,14 +269,30 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
     }
 
     static async #onSubmit(_event, _form, formData) {
-        const updates = [];
         const changedSetting = _event.target?.name;
         const entries = changedSetting ? [[changedSetting, formData.object[changedSetting]]] : Object.entries(formData.object);
+        const combatPartial = {};
+        const updates = [];
+
         for (const [id, value] of entries) {
+            if (id.startsWith("appSettings.combatTracker.")) {
+                const key = id.slice("appSettings.combatTracker.".length);
+                combatPartial[key] = typeof APP_SETTINGS_DEFAULTS.combatTracker[key] === "boolean" ? !!value : value;
+                continue;
+            }
             const setting = game.settings.settings.get(id);
             if (!setting || !setting.config) continue;
             updates.push(game.settings.set(setting.namespace, setting.key, value));
         }
+
+        if (Object.keys(combatPartial).length) {
+            await AppSettings.set("combatTracker", combatPartial);
+            const combat = AppSettings.get("combatTracker");
+            const tracker = game.modules.get("crucibletongs")?.api?.combatTracker;
+            if (!combat.enabled) tracker?.close();
+            else if (game.combat) tracker?.render(true, { focus: false, forceDock: combat.dockToCalendar });
+        }
+
         await Promise.all(updates);
     }
 
@@ -204,6 +304,13 @@ export class CrucibleTongsSettingsConfig extends foundry.applications.api.Handle
             updates.push(game.settings.set(setting.namespace, setting.key, setting.default));
         }
         await Promise.all(updates);
+        await AppSettings.resetApp("combatTracker");
+        const tracker = game.modules.get("crucibletongs")?.api?.combatTracker;
+        if (game.combat && AppSettings.get("combatTracker").enabled) {
+            tracker?.render(true, { focus: false, forceDock: true });
+        } else {
+            tracker?.close();
+        }
         ui.notifications.info(game.i18n.localize("crucibletongs.SETTINGS.CONFIG.DefaultsRestored"));
         this.render(true, { focus: false });
     }

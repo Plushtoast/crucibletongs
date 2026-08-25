@@ -1,20 +1,28 @@
 import { syncPartyViewer } from "./party-viewer.js";
 import { refreshImagePopoutControls } from "./image-popout.js";
+import { AppSettings } from "./app-settings.js";
 
-Hooks.once('init', () => {
+Hooks.once("init", () => {
     const settings = {
+        appSettings: {
+            name: "appSettings",
+            scope: "client",
+            config: false,
+            default: AppSettings.defaults(),
+            type: Object,
+        },
         enableHotBarActor: {
-            name: 'crucibletongs.SETTINGS.enableHotBarActor',
-            hint: 'crucibletongs.SETTINGS.enableHotBarActorHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.enableHotBarActor",
+            hint: "crucibletongs.SETTINGS.enableHotBarActorHint",
+            scope: "client",
             config: true,
             default: true,
             type: Boolean,
         },
         showFavoriteActionsTab: {
-            name: 'crucibletongs.SETTINGS.showFavoriteActions',
-            hint: 'crucibletongs.SETTINGS.showFavoriteActionsTabHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.showFavoriteActions",
+            hint: "crucibletongs.SETTINGS.showFavoriteActionsTabHint",
+            scope: "client",
             config: true,
             default: true,
             type: Boolean,
@@ -23,80 +31,17 @@ Hooks.once('init', () => {
                 if (instance) instance.render(true, { focus: false });
             },
         },
-        enableCombatFlow: {
-            name: 'crucibletongs.SETTINGS.enableCombatFlow',
-            hint: 'crucibletongs.SETTINGS.enableCombatFlowHint',
-            scope: 'client',
-            config: true,
-            default: true,
-            type: Boolean,
-        },
-        iniTrackerPosition: {
-            name: 'iniTrackerPosition',
-            scope: 'client',
-            config: false,
-            default: {},
-            type: Object,
-        },
         actionConfirmToastPosition: {
-            name: 'actionConfirmToastPosition',
-            scope: 'client',
+            name: "actionConfirmToastPosition",
+            scope: "client",
             config: false,
             default: {},
             type: Object,
-        },
-        enableCombatPan: {
-            name: 'crucibletongs.SETTINGS.enableCombatPan',
-            hint: 'crucibletongs.SETTINGS.enableCombatPanHint',
-            scope: 'client',
-            config: true,
-            default: true,
-            type: Boolean,
-        },
-        showIniTrackerActionPips: {
-            name: 'crucibletongs.SETTINGS.showIniTrackerActionPips',
-            hint: 'crucibletongs.SETTINGS.showIniTrackerActionPipsHint',
-            scope: 'client',
-            config: true,
-            default: true,
-            type: Boolean,
-            onChange: async () => {
-                if (game.combat) game.modules.get("crucibletongs").api.combatTracker.render(true, { focus: false });
-            },
-        },
-        iniTrackerSize: {
-            name: 'crucibletongs.SETTINGS.iniTrackerSize',
-            hint: 'crucibletongs.SETTINGS.iniTrackerSizeHint',
-            scope: 'client',
-            config: true,
-            default: 70,
-            type: Number,
-            range: {
-                min: 30,
-                max: 140,
-                step: 5,
-            },
-        },
-        iniTrackerCount: {
-            name: 'crucibletongs.SETTINGS.iniTrackerCount',
-            hint: 'crucibletongs.SETTINGS.iniTrackerCountHint',
-            scope: 'client',
-            config: true,
-            default: 5,
-            type: Number,
-            range: {
-                min: 3,
-                max: 25,
-                step: 1,
-            },
-            onChange: async (val) => {
-                if(game.combat) game.modules.get("crucibletongs").api.combatTracker.render({ force: true });
-            },
         },
         hotbarActorScale: {
-            name: 'crucibletongs.SETTINGS.hotbarActorScale',
-            hint: 'crucibletongs.SETTINGS.hotbarActorScaleHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.hotbarActorScale",
+            hint: "crucibletongs.SETTINGS.hotbarActorScaleHint",
+            scope: "client",
             config: true,
             default: 1,
             type: Number,
@@ -111,9 +56,9 @@ Hooks.once('init', () => {
             },
         },
         hotbarActionBarColumns: {
-            name: 'crucibletongs.SETTINGS.hotbarActionBarColumns',
-            hint: 'crucibletongs.SETTINGS.hotbarActionBarColumnsHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.hotbarActionBarColumns",
+            hint: "crucibletongs.SETTINGS.hotbarActionBarColumnsHint",
+            scope: "client",
             config: true,
             default: 6,
             type: Number,
@@ -128,9 +73,9 @@ Hooks.once('init', () => {
             },
         },
         hotbarActionBarRows: {
-            name: 'crucibletongs.SETTINGS.hotbarActionBarRows',
-            hint: 'crucibletongs.SETTINGS.hotbarActionBarRowsHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.hotbarActionBarRows",
+            hint: "crucibletongs.SETTINGS.hotbarActionBarRowsHint",
+            scope: "client",
             config: true,
             default: 3,
             type: Number,
@@ -145,9 +90,9 @@ Hooks.once('init', () => {
             },
         },
         hotbarHorizontalOffset: {
-            name: 'crucibletongs.SETTINGS.hotbarHorizontalOffset',
-            hint: 'crucibletongs.SETTINGS.hotbarHorizontalOffsetHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.hotbarHorizontalOffset",
+            hint: "crucibletongs.SETTINGS.hotbarHorizontalOffsetHint",
+            scope: "client",
             config: true,
             default: 0,
             type: Number,
@@ -162,9 +107,9 @@ Hooks.once('init', () => {
             },
         },
         enableActionConfirmToast: {
-            name: 'crucibletongs.SETTINGS.enableActionConfirmToast',
-            hint: 'crucibletongs.SETTINGS.enableActionConfirmToastHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.enableActionConfirmToast",
+            hint: "crucibletongs.SETTINGS.enableActionConfirmToastHint",
+            scope: "client",
             config: true,
             default: true,
             type: Boolean,
@@ -176,9 +121,9 @@ Hooks.once('init', () => {
             },
         },
         enableImagePopout: {
-            name: 'crucibletongs.SETTINGS.enableImagePopout',
-            hint: 'crucibletongs.SETTINGS.enableImagePopoutHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.enableImagePopout",
+            hint: "crucibletongs.SETTINGS.enableImagePopoutHint",
+            scope: "client",
             config: true,
             default: true,
             type: Boolean,
@@ -187,9 +132,9 @@ Hooks.once('init', () => {
             },
         },
         enablePartyViewer: {
-            name: 'crucibletongs.SETTINGS.enablePartyViewer',
-            hint: 'crucibletongs.SETTINGS.enablePartyViewerHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.enablePartyViewer",
+            hint: "crucibletongs.SETTINGS.enablePartyViewerHint",
+            scope: "client",
             config: true,
             default: true,
             type: Boolean,
@@ -201,31 +146,31 @@ Hooks.once('init', () => {
             },
         },
         partyViewerPosition: {
-            name: 'partyViewerPosition',
-            scope: 'client',
+            name: "partyViewerPosition",
+            scope: "client",
             config: false,
             default: {},
             type: Object,
         },
         partyViewerLayout: {
-            name: 'crucibletongs.SETTINGS.partyViewerLayout',
-            hint: 'crucibletongs.SETTINGS.partyViewerLayoutHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.partyViewerLayout",
+            hint: "crucibletongs.SETTINGS.partyViewerLayoutHint",
+            scope: "client",
             config: true,
             default: 0,
             type: Number,
             choices: {
-                0: 'crucibletongs.SETTINGS.partyViewerLayoutVertical',
-                1: 'crucibletongs.SETTINGS.partyViewerLayoutHorizontal',
+                0: "crucibletongs.SETTINGS.partyViewerLayoutVertical",
+                1: "crucibletongs.SETTINGS.partyViewerLayoutHorizontal",
             },
             onChange: async () => {
                 await syncPartyViewer();
             },
         },
         partyViewerSize: {
-            name: 'crucibletongs.SETTINGS.partyViewerSize',
-            hint: 'crucibletongs.SETTINGS.partyViewerSizeHint',
-            scope: 'client',
+            name: "crucibletongs.SETTINGS.partyViewerSize",
+            hint: "crucibletongs.SETTINGS.partyViewerSizeHint",
+            scope: "client",
             config: true,
             default: 72,
             type: Number,
@@ -240,6 +185,6 @@ Hooks.once('init', () => {
         },
     };
     for (const [key, value] of Object.entries(settings)) {
-        game.settings.register('crucibletongs', key, value);
+        game.settings.register("crucibletongs", key, value);
     }
 });
