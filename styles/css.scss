@@ -606,6 +606,31 @@
 .crucible-tongs-combat-tracker {
     position: absolute;
 
+    .resize-handle {
+        flex: 0 0 10px;
+        align-self: stretch;
+        min-height: var(--iniTrackerSize);
+        cursor: ew-resize;
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 20%;
+            bottom: 20%;
+            left: 50%;
+            width: 3px;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        &:hover::after,
+        &.active::after {
+            background: rgba(255, 255, 255, 0.85);
+        }
+    }
+
     .dragHandler {
         height: var(--tokenQuickhotsize);
         text-align: center;
@@ -617,6 +642,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        z-index: 1;
 
         &:hover {
             color: white;

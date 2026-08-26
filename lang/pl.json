@@ -12,6 +12,18 @@
             "iniTrackerCountHint": "Liczba postaci wyświetlanych w oknie śledzenia walki",
             "iniTrackerSize": "Rozmiar narzędzia śledzenia walk",
             "iniTrackerSizeHint": "Rozmiar przycisków w narzędziu śledzenia walki",
+            "combatTracker": {
+                "config": "Konfiguracja śledzenia walki",
+                "configTitle": "Konfiguracja śledzenia walki",
+                "defaultsRestored": "Ustawienia śledzenia walki przywrócone do domyślnych.",
+                "dockToCalendar": "Dokuj do kalendarza",
+                "dockToCalendarHint": "Na początku walki zwija rozwiniętą sekcję kalendarza Ember i wyśrodkowuje tracker pod przyciskami dni. Bez Ember — u góry na środku. Resetuje się przy każdej nowej walce i przywraca kalendarz po jej zakończeniu.",
+                "fadedUi": "Użyj faded UI",
+                "fadedUiHint": "Dodaje klasę faded-ui Foundry, aby tracker używał przezroczystości interfejsu.",
+                "preferTokenImage": "Preferuj obraz tokena",
+                "preferTokenImageHint": "Używa obrazu tokena w trackerze. Gdy wyłączone — portret aktora.",
+                "resizeHint": "Przeciągnij, aby zmienić liczbę wyświetlanych uczestników"
+            },
             "hotbarActorScale": "Skala aktorów na pasku skrótów",
             "hotbarActorScaleHint": "Skala całego interfejsu użytkownika paska skrótów postaci, obejmującego awatara, zasoby, broń oraz ikony akcji.",
             "hotbarActionBarColumns": "Kolumny paska akcji",

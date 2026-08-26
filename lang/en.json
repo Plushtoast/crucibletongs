@@ -12,6 +12,18 @@
             "iniTrackerCountHint": "Number of actors displayed in the Combat Tracker",
             "iniTrackerSize": "Combat Tracker Size",
             "iniTrackerSizeHint": "Size of the buttons in the Combat Tracker",
+            "combatTracker": {
+                "config": "Combat Tracker Configuration",
+                "configTitle": "Combat Tracker Configuration",
+                "defaultsRestored": "Combat Tracker settings reset to defaults.",
+                "dockToCalendar": "Dock to Calendar",
+                "dockToCalendarHint": "When combat starts, collapse the Ember calendar expanded section and center the tracker below the day buttons. Without Ember, docks to top center. Resets on each new combat and restores the calendar afterward.",
+                "fadedUi": "Use Faded UI",
+                "fadedUiHint": "Apply Foundry's faded-ui class so the tracker uses the interface inactive opacity.",
+                "preferTokenImage": "Prefer Token Image",
+                "preferTokenImageHint": "Use the token image in the tracker. When off, use the actor portrait instead.",
+                "resizeHint": "Drag to change how many combatants are shown"
+            },
             "hotbarActorScale": "Hotbar Actor Scale",
             "hotbarActorScaleHint": "Scale of the complete actor hotbar HUD, including avatar, resources, weapons, and action icons.",
             "hotbarActionBarColumns": "Hotbar Action Bar Columns",
